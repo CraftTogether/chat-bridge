@@ -19,7 +19,7 @@ public class MinecraftMessageListener implements Listener {
         handle(message, username, avatar);
     }
 
-    public void handle(String username, String message, String avatar) {
+    public void handle(String message, String username, String avatar) {
         DiscordMessageHandler.handle(username, message, avatar);
     }
 

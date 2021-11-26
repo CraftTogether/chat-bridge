@@ -15,17 +15,16 @@ public class ChatBridge extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        try {
-            plugin = this;
-            DiscordBot.start();
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
+        plugin = this;
+        new Thread(DiscordBot::start).start();
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
 
-            final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-            pluginManager.registerEvents(new MinecraftMessageListener(), this);
-        } catch (LoginException e) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error while starting the Plugin \"ChatBridge\"");
-            e.printStackTrace();
-        }
+        registerEvents();
+    }
+
+    private void registerEvents() {
+        final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
+        pluginManager.registerEvents(new MinecraftMessageListener(), this);
     }
 
     @Override

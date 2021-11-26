@@ -1,19 +1,19 @@
 package com.github.crafttogether.chatbridge.discord;
 
 import com.github.crafttogether.chatbridge.ChatBridge;
-import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-
-import javax.security.auth.login.LoginException;
+import discord4j.core.DiscordClient;
+import discord4j.core.GatewayDiscordClient;
+import discord4j.core.event.domain.message.MessageCreateEvent;
 
 public class DiscordBot {
 
-    public static void start() throws LoginException {
-        JDABuilder
-                .createLight(ChatBridge.plugin.getConfig().getString("token"))
-                .setEnabledIntents(GatewayIntent.GUILD_MESSAGES)
-                .addEventListeners(new MessageListener())
-                .build();
+    public static void start() {
+        final DiscordClient client = DiscordClient.create(ChatBridge.plugin.getConfig().getString("token"));
+        final GatewayDiscordClient gateway = client.login().block();
+
+        final MessageListener listener = new MessageListener();
+
+        gateway.on(MessageCreateEvent.class).subscribe(listener::onGuildMessageReceived);
     }
 
 }

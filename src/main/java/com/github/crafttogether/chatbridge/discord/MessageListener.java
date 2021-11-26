@@ -1,13 +1,15 @@
 package com.github.crafttogether.chatbridge.discord;
 
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import com.github.crafttogether.chatbridge.ChatBridge;
+import discord4j.core.event.domain.message.MessageCreateEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class MessageListener extends ListenerAdapter {
+public class MessageListener {
 
-    @Override
-    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+    public void onGuildMessageReceived(@NotNull MessageCreateEvent event) {
+        if (event.getMessage().getWebhookId().isPresent()) return;
+        if (!ChatBridge.plugin.getConfig().getString("discordChannelId").equals(event.getMessage().getRestChannel().getId().asString())) return;
+
         //MinecraftMessageHandler.handle()
         //IrcMessageHandler.handle()
     }
