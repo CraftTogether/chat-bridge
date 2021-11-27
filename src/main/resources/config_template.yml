@@ -1,0 +1,4 @@
+discord:
+  token: your_token
+  discordChannelId: channel_id
+  minecraftPrefix: some_prefix
