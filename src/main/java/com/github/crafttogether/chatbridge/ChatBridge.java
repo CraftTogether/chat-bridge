@@ -7,8 +7,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.security.auth.login.LoginException;
-
 public class ChatBridge extends JavaPlugin {
 
     public static JavaPlugin plugin;
