@@ -3,3 +3,9 @@ discord:
   discordChannelId: channel_id
   minecraftPrefix: some_prefix
 irc:
+  username: irc_username
+  hostname: irc_hostname
+  port: irc_port
+  tls: is_tls_enabled
+  timeout: connection_timeout
+  channel: irc_channel
