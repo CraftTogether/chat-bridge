@@ -1,7 +1,7 @@
 package com.github.crafttogether.chatbridge.minecraft;
 
 import com.github.crafttogether.chatbridge.discord.MessageSource;
-import com.github.crafttogether.chatbridge.discord.DiscordMessageHandler;
+import com.github.crafttogether.chatbridge.discord.DiscordMessageSender;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -16,8 +16,7 @@ public class MinecraftMessageListener implements Listener {
         final String username = PlainTextComponentSerializer.plainText().serialize(event.getPlayer().displayName());
         final String avatar = "https://crafatar.com/avatars/" + event.getPlayer().getUniqueId();
 
-        Bukkit.getConsoleSender().sendMessage("Recieved message");
-        DiscordMessageHandler.handle(username, message, avatar, MessageSource.MINECRAFT);
+        DiscordMessageSender.handle(username, message, avatar, MessageSource.MINECRAFT);
     }
 
 }

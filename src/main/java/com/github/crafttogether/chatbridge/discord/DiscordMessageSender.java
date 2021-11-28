@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 
 import java.io.IOException;
 
-public class DiscordMessageHandler {
+public class DiscordMessageSender {
 
     public static void handle(String username, String message, String avatar, MessageSource source) {
         try {

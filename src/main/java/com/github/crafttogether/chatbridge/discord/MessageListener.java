@@ -1,7 +1,7 @@
 package com.github.crafttogether.chatbridge.discord;
 
 import com.github.crafttogether.chatbridge.ChatBridge;
-import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageHandler;
+import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageSender;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +12,7 @@ public class MessageListener {
         final String channelId = ChatBridge.plugin.getConfig().getConfigurationSection("discord").getString("discordChannelId");
         if (!channelId.equals(event.getMessage().getRestChannel().getId().asString())) return;
 
-        MinecraftMessageHandler.handle(event.getMember().get().getDisplayName(), event.getMessage().getContent());
-        //IrcMessageHandler.handle()
+        MinecraftMessageSender.send(event.getMember().get().getDisplayName(), event.getMessage().getContent());
+        //IrcMessageSender.send()
     }
 }
