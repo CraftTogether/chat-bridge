@@ -1,6 +1,7 @@
 package com.github.crafttogether.chatbridge;
 
 import com.github.crafttogether.chatbridge.discord.DiscordBot;
+import com.github.crafttogether.chatbridge.irc.OnPrivMessage;
 import com.github.crafttogether.chatbridge.irc.OnWelcomeMessage;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageListener;
 import dev.polarian.ircj.IrcClient;
@@ -42,6 +43,7 @@ public class ChatBridge extends JavaPlugin {
         config.setTls(section.getBoolean("tls"));
         client = new IrcClient(config);
         client.addWelcomeEventListener(new OnWelcomeMessage());
+        client.addPrivMessageEventListener(new OnPrivMessage());
         new Thread(DiscordBot::start).start();
         new Thread(() -> {
             try {
