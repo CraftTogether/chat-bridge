@@ -1,7 +1,7 @@
 package com.github.crafttogether.chatbridge.minecraft;
 
-import com.github.crafttogether.chatbridge.discord.MessageSource;
 import com.github.crafttogether.chatbridge.discord.DiscordMessageSender;
+import com.github.crafttogether.chatbridge.discord.MessageSource;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.event.EventHandler;
@@ -16,6 +16,7 @@ public class MinecraftMessageListener implements Listener {
         final String avatar = "https://crafatar.com/avatars/" + event.getPlayer().getUniqueId();
 
         DiscordMessageSender.send(username, message, avatar, MessageSource.MINECRAFT);
+        // Send to irc
     }
 
 }
