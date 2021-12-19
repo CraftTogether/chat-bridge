@@ -11,6 +11,6 @@ public class OnPrivMessage implements PrivMessageEvent {
     @Override
     public void invoke(PrivMessage message) {
         MinecraftMessageSender.send(message.getNick(), message.getMessage());
-        DiscordMessageSender.handle(message.getNick(), message.getMessage(), null, MessageSource.IRC);
+        DiscordMessageSender.send(message.getNick(), message.getMessage(), null, MessageSource.IRC);
     }
 }

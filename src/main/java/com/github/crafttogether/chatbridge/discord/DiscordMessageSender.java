@@ -1,16 +1,18 @@
 package com.github.crafttogether.chatbridge.discord;
 
+import com.github.crafttogether.chatbridge.ChatBridge;
 import com.github.crafttogether.chatbridge.utilities.Webhook;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.util.ChatPaginator;
 
 import java.io.IOException;
 
 public class DiscordMessageSender {
 
-    public static void handle(String username, String message, String avatar, MessageSource source) {
+    public static void send(String username, String message, String avatar, MessageSource source) {
         try {
-            new Webhook("https://canary.discord.com/api/webhooks/913818035930931241/yb5JfGwN2cLbfZaBLWOIxmPxWsHSgKB2RLRpAGo1KOITdqNhJqcwB7kR6nmvomw-BCYY")
+            new Webhook(ChatBridge.plugin.getConfig().getConfigurationSection("discord").getString("webhook"))
                     .setAvatarUrl(avatar)
                     .setUsername(username)
                     .setContent(source.icon + " " + message)

@@ -15,7 +15,7 @@ public class MinecraftMessageListener implements Listener {
         final String username = PlainTextComponentSerializer.plainText().serialize(event.getPlayer().displayName());
         final String avatar = "https://crafatar.com/avatars/" + event.getPlayer().getUniqueId();
 
-        DiscordMessageSender.handle(username, message, avatar, MessageSource.MINECRAFT);
+        DiscordMessageSender.send(username, message, avatar, MessageSource.MINECRAFT);
     }
 
 }
