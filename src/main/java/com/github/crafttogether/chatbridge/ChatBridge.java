@@ -51,7 +51,7 @@ public class ChatBridge extends JavaPlugin {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
+        }).start();
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
 
         registerEvents();
