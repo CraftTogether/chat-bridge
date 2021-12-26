@@ -32,7 +32,7 @@ public class ChatBridge extends JavaPlugin {
         assert section != null;
         Config config = new Config();
         List<String> channel = new ArrayList<>();
-        channel.add(section.getString("channel"));
+        channel.add("#" + section.getString("channel"));
         String nickname = section.getString("username");
         config.setUsername(nickname);
         config.setNickname(nickname);
@@ -51,7 +51,7 @@ public class ChatBridge extends JavaPlugin {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
+        }).start();
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
 
         registerEvents();
