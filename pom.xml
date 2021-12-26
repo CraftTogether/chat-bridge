@@ -118,7 +118,7 @@
         <dependency>
             <groupId>dev.polarian</groupId>
             <artifactId>ircj</artifactId>
-            <version>1.0-SNAPSHOT-4</version>
+            <version>1.0-SNAPSHOT-5</version>
         </dependency>
 
     </dependencies>

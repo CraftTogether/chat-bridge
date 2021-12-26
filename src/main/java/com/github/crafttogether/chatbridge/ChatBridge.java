@@ -16,10 +16,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.crafttogether.chatbridge.irc.IrcMessageSender.channel;
+import static com.github.crafttogether.chatbridge.irc.IrcMessageSender.client;
+
 public class ChatBridge extends JavaPlugin {
 
     public static JavaPlugin plugin;
-    public static IrcClient client;
+    public static IrcClient ircClient;
 
     // Variables to store the connection state of discord and irc to ensure they are both connected
     public static boolean discordConnected = false;
@@ -31,23 +34,25 @@ public class ChatBridge extends JavaPlugin {
         ConfigurationSection section = this.getConfig().getConfigurationSection("irc");
         assert section != null;
         Config config = new Config();
-        List<String> channel = new ArrayList<>();
-        channel.add("#" + section.getString("channel"));
+        List<String> ircChannel = new ArrayList<>();
+        ircChannel.add("#" + section.getString("ircChannel"));
         String nickname = section.getString("username");
         config.setUsername(nickname);
         config.setNickname(nickname);
-        config.setChannels(channel);
+        config.setChannels(ircChannel);
         config.setHostname(section.getString("hostname"));
         config.setPort(section.getInt("port"));
         config.setTimeout(section.getInt("timeout") * 1000); // multiply by 1000 to convert seconds to milliseconds
         config.setTls(section.getBoolean("tls"));
-        client = new IrcClient(config);
-        client.addWelcomeEventListener(new OnWelcomeMessage());
-        client.addPrivMessageEventListener(new OnPrivMessage());
+        ircClient = new IrcClient(config);
+        ircClient.addWelcomeEventListener(new OnWelcomeMessage());
+        ircClient.addPrivMessageEventListener(new OnPrivMessage());
+        channel = section.getString("ircChannel");
+        client = ircClient;
         new Thread(DiscordBot::start).start();
         new Thread(() -> {
             try {
-                client.connect();
+                ircClient.connect();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,9 +1,12 @@
 package com.github.crafttogether.chatbridge.discord;
 
 import com.github.crafttogether.chatbridge.ChatBridge;
+import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageSender;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public class MessageListener {
 
@@ -13,6 +16,10 @@ public class MessageListener {
         if (!channelId.equals(event.getMessage().getRestChannel().getId().asString())) return;
 
         MinecraftMessageSender.send(event.getMember().get().getDisplayName(), event.getMessage().getContent());
-        //IrcMessageSender.send()
+        try {
+            IrcMessageSender.send(String.format("[Discord]: <%s> %s", event.getMember().get().getDisplayName(), event.getMessage().getContent()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
