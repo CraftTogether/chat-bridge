@@ -12,6 +12,7 @@ public class DiscordMessageSender {
     public static void send(String username, String message, String avatar, MessageSource source) {
         new Thread(() -> {
             try {
+                System.out.println(avatar);
                 new Webhook(ChatBridge.plugin.getConfig().getConfigurationSection("discord").getString("webhook"))
                         .setAvatarUrl(avatar)
                         .setUsername(username)

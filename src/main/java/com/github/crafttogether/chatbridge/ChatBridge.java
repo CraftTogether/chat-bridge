@@ -1,6 +1,7 @@
 package com.github.crafttogether.chatbridge;
 
 import com.github.crafttogether.chatbridge.discord.DiscordBot;
+import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
 import com.github.crafttogether.chatbridge.irc.OnPrivMessage;
 import com.github.crafttogether.chatbridge.irc.OnWelcomeMessage;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageListener;
@@ -16,9 +17,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.crafttogether.chatbridge.irc.IrcMessageSender.channel;
-import static com.github.crafttogether.chatbridge.irc.IrcMessageSender.client;
-
 public class ChatBridge extends JavaPlugin {
 
     public static JavaPlugin plugin;
@@ -31,24 +29,33 @@ public class ChatBridge extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-        ConfigurationSection section = this.getConfig().getConfigurationSection("irc");
+
+        final ConfigurationSection section = this.getConfig().getConfigurationSection("irc");
         assert section != null;
-        Config config = new Config();
-        List<String> ircChannel = new ArrayList<>();
-        ircChannel.add("#" + section.getString("ircChannel"));
-        String nickname = section.getString("username");
-        config.setUsername(nickname);
-        config.setNickname(nickname);
-        config.setChannels(ircChannel);
-        config.setHostname(section.getString("hostname"));
-        config.setPort(section.getInt("port"));
-        config.setTimeout(section.getInt("timeout") * 1000); // multiply by 1000 to convert seconds to milliseconds
-        config.setTls(section.getBoolean("tls"));
+        final Config config = new Config();
+
+        final List<String> ircChannel = new ArrayList<String>() {{
+            add("#" + section.getString("ircChannel"));
+        }};
+        final String nickname = section.getString("username");
+
+        config
+                .setUsername(nickname)
+                .setNickname(nickname)
+                .setChannels(ircChannel)
+                .setHostname(section.getString("hostname"))
+                .setPort(section.getInt("port"))
+                .setTimeout(section.getInt("timeout") * 1000) // multiply by 1000 to convert seconds to milliseconds
+                .setTls(section.getBoolean("tls"));
+
         ircClient = new IrcClient(config);
         ircClient.addWelcomeEventListener(new OnWelcomeMessage());
         ircClient.addPrivMessageEventListener(new OnPrivMessage());
-        channel = section.getString("ircChannel");
-        client = ircClient;
+
+
+        IrcMessageSender.channel = ircChannel.get(0);
+        IrcMessageSender.client = ircClient;
+
         new Thread(DiscordBot::start).start();
         new Thread(() -> {
             try {
@@ -57,8 +64,8 @@ public class ChatBridge extends JavaPlugin {
                 e.printStackTrace();
             }
         }).start();
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
 
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
         registerEvents();
     }
 
@@ -67,8 +74,4 @@ public class ChatBridge extends JavaPlugin {
         pluginManager.registerEvents(new MinecraftMessageListener(), this);
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-    }
 }
