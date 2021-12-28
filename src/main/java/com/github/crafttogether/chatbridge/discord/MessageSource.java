@@ -5,7 +5,7 @@ import com.github.crafttogether.chatbridge.ChatBridge;
 public enum MessageSource {
     MINECRAFT(ChatBridge.plugin.getConfig().getConfigurationSection("discord").getString("minecraftPrefix")),
     DISCORD(""),
-    IRC("");
+    IRC(ChatBridge.plugin.getConfig().getConfigurationSection("irc").getString("prefix"));
 
     public final String icon;
     MessageSource(String icon) {
