@@ -3,27 +3,27 @@ package com.github.crafttogether.chatbridge.discord;
 import com.github.crafttogether.chatbridge.ChatBridge;
 import com.github.crafttogether.chatbridge.MessageSource;
 import com.github.crafttogether.chatbridge.utilities.Webhook;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class DiscordMessageSender {
 
+    private static final Logger logger = LoggerFactory.getLogger(DiscordMessageSender.class);
+
     public static void send(String username, String message, String avatar, MessageSource source) {
-        new Thread(() -> {
-            try {
-                System.out.println(avatar);
-                new Webhook(ChatBridge.plugin.getConfig().getConfigurationSection("discord").getString("webhook"))
-                        .setAvatarUrl(avatar)
-                        .setUsername(username)
-                        .setContent(source.icon + " " + message)
-                        .send();
-            } catch (IOException e) {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error while sending a message to Discord");
-                e.printStackTrace();
-            }
-        }).start();
+        try {
+            System.out.println(avatar);
+            new Webhook(ChatBridge.plugin.getConfig().getConfigurationSection("discord").getString("webhook"))
+                    .setAvatarUrl(avatar)
+                    .setUsername(username)
+                    .setContent(source.icon + " " + message)
+                    .send();
+        } catch (IOException e) {
+            logger.info("Failed to send message to discord:");
+            e.printStackTrace();
+        }
     }
 
 }
