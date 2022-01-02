@@ -10,3 +10,4 @@ irc:
   tls: is_tls_enabled
   timeout: connection_timeout
   channel: irc_channel
+  prefix: some_prefix
