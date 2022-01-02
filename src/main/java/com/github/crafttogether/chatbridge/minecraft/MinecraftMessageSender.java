@@ -11,9 +11,9 @@ public class MinecraftMessageSender {
     public static void send(String author, String message, MessageSource source) {
         TextComponent msg;
         if (source == MessageSource.DISCORD) {
-            msg = PlainTextComponentSerializer.plainText().deserialize(ChatColor.BLUE + String.format("[Discord]: <%s> %s", author, message));
+            msg = PlainTextComponentSerializer.plainText().deserialize(ChatColor.AQUA + String.format("[Discord]: <%s> %s", author, message));
         } else {
-            msg = PlainTextComponentSerializer.plainText().deserialize(ChatColor.BLUE + String.format("[IRC]: <%s> %s", author, message));
+            msg = PlainTextComponentSerializer.plainText().deserialize(ChatColor.AQUA + String.format("[IRC]: <%s> %s", author, message));
         }
         Bukkit.getServer().sendMessage(msg);
     }
