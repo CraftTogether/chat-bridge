@@ -20,7 +20,7 @@ public class MinecraftMessageListener implements Listener {
 
         DiscordMessageSender.send(username, message, avatar, MessageSource.MINECRAFT);
         try {
-            IrcMessageSender.send(String.format("[Minecraft]: <%s> %s", username, message));
+            IrcMessageSender.send(String.format("\u000310[Minecraft]: <%s> %s", username, message));
         } catch (IOException e) {
             e.printStackTrace();
         }

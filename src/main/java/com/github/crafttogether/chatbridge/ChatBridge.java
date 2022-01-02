@@ -4,7 +4,9 @@ import com.github.crafttogether.chatbridge.discord.DiscordBot;
 import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
 import com.github.crafttogether.chatbridge.irc.OnPrivMessage;
 import com.github.crafttogether.chatbridge.irc.OnWelcomeMessage;
+import com.github.crafttogether.chatbridge.minecraft.MinecraftJoinEvent;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageListener;
+import com.github.crafttogether.chatbridge.minecraft.MinecraftQuitEvent;
 import dev.polarian.ircj.IrcClient;
 import dev.polarian.ircj.objects.Config;
 import org.bukkit.Bukkit;
@@ -84,6 +86,8 @@ public class ChatBridge extends JavaPlugin {
     private void registerEvents() {
         final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
         pluginManager.registerEvents(new MinecraftMessageListener(), this);
+        pluginManager.registerEvents(new MinecraftJoinEvent(), this);
+        pluginManager.registerEvents(new MinecraftQuitEvent(), this);
     }
 
 }

@@ -18,7 +18,7 @@ public class MessageListener {
 
         MinecraftMessageSender.send(event.getMember().get().getDisplayName(), event.getMessage().getContent(), MessageSource.DISCORD);
         try {
-            IrcMessageSender.send(String.format("[Discord]: <%s> %s", event.getMember().get().getDisplayName(), event.getMessage().getContent()));
+            IrcMessageSender.send(String.format("\u000310[Discord]: <%s> %s", event.getMember().get().getDisplayName(), event.getMessage().getContent()));
         } catch (IOException e) {
             e.printStackTrace();
         }
