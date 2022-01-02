@@ -2,6 +2,7 @@ discord:
   token: your_token
   discordChannelId: channel_id
   minecraftPrefix: some_prefix
+  webhook: some_webhook
 irc:
   username: irc_username
   hostname: irc_hostname
