@@ -12,12 +12,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChatBridge extends JavaPlugin {
+
+    private static final Logger logger = LoggerFactory.getLogger(ChatBridge.class);
 
     public static JavaPlugin plugin;
     public static IrcClient ircClient;
@@ -35,7 +39,7 @@ public class ChatBridge extends JavaPlugin {
         final Config config = new Config();
 
         final List<String> ircChannel = new ArrayList<String>() {{
-            add("#" + section.getString("ircChannel"));
+            add("#" + section.getString("channel"));
         }};
         final String nickname = section.getString("username");
 
@@ -56,9 +60,17 @@ public class ChatBridge extends JavaPlugin {
         IrcMessageSender.channel = ircChannel.get(0);
         IrcMessageSender.client = ircClient;
 
-        new Thread(DiscordBot::start).start();
+        // Discord thread
+        new Thread(() -> {
+            logger.info("Discord Thread started");
+            DiscordBot.start();
+
+        }).start();
+
+        // IRC thread
         new Thread(() -> {
             try {
+                logger.info("IRC Thread started");
                 ircClient.connect();
             } catch (IOException e) {
                 e.printStackTrace();

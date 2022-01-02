@@ -1,6 +1,7 @@
 package com.github.crafttogether.chatbridge.discord;
 
 import com.github.crafttogether.chatbridge.ChatBridge;
+import com.github.crafttogether.chatbridge.MessageSource;
 import com.github.crafttogether.chatbridge.utilities.Webhook;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

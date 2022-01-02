@@ -1,7 +1,7 @@
 package com.github.crafttogether.chatbridge.discord;
 
-import com.github.crafttogether.chatbridge.Bridge;
 import com.github.crafttogether.chatbridge.ChatBridge;
+import com.github.crafttogether.chatbridge.MessageSource;
 import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageSender;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -16,7 +16,7 @@ public class MessageListener {
         final String channelId = ChatBridge.plugin.getConfig().getConfigurationSection("discord").getString("discordChannelId");
         if (!channelId.equals(event.getMessage().getRestChannel().getId().asString())) return;
 
-        MinecraftMessageSender.send(event.getMember().get().getDisplayName(), event.getMessage().getContent(), Bridge.DISCORD);
+        MinecraftMessageSender.send(event.getMember().get().getDisplayName(), event.getMessage().getContent(), MessageSource.DISCORD);
         try {
             IrcMessageSender.send(String.format("[Discord]: <%s> %s", event.getMember().get().getDisplayName(), event.getMessage().getContent()));
         } catch (IOException e) {

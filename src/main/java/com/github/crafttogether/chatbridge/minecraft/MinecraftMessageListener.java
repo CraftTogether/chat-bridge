@@ -1,7 +1,7 @@
 package com.github.crafttogether.chatbridge.minecraft;
 
 import com.github.crafttogether.chatbridge.discord.DiscordMessageSender;
-import com.github.crafttogether.chatbridge.discord.MessageSource;
+import com.github.crafttogether.chatbridge.MessageSource;
 import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
