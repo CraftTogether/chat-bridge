@@ -7,12 +7,13 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import org.bukkit.Bukkit;
 
 public class DiscordBot {
+    public static DiscordClient client;
 
     public static void start() {
         Bukkit.getConsoleSender().sendMessage("Connecting to Discord");
 
         final String token = ChatBridge.plugin.getConfig().getConfigurationSection("discord").getString("token");
-        final DiscordClient client = DiscordClient.create(token);
+        client = DiscordClient.create(token);
         final GatewayDiscordClient gateway = client.login().block();
 
         final MessageListener listener = new MessageListener();
