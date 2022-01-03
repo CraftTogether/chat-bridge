@@ -13,6 +13,15 @@ public class DiscordMessageSender {
     private static final Logger logger = LoggerFactory.getLogger(DiscordMessageSender.class);
 
     public static void send(String username, String message, String avatar, MessageSource source) {
+        // check if the message pings @everyone or @here
+        String[] args = message.split("\s+");
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].startsWith("@everyone") || args[i].startsWith("@here")) {
+                args[i] = "";
+            }
+        }
+        message = String.join(" ", args);
+        if (message.length() == 0) return;
         try {
             new Webhook(ChatBridge.plugin.getConfig().getConfigurationSection("discord").getString("webhook"))
                     .setAvatarUrl(avatar)
