@@ -18,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +27,8 @@ public class ChatBridge extends JavaPlugin {
 
     private static final Logger logger = LoggerFactory.getLogger(ChatBridge.class);
 
-    public static JavaPlugin plugin;
-    public static IrcClient ircClient;
+    private static JavaPlugin plugin;
+    private static IrcClient ircClient;
 
     // Variables to store the connection state of discord and irc to ensure they are both connected
     public static boolean discordConnected = false;
@@ -35,6 +37,13 @@ public class ChatBridge extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+        getConfig().options().copyDefaults();
+        saveDefaultConfig();
+        try {
+            getConfig().load(Files.newBufferedReader(Path.of(plugin.getDataFolder() + "/config.yml")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         final ConfigurationSection section = this.getConfig().getConfigurationSection("irc");
         assert section != null;
@@ -88,6 +97,14 @@ public class ChatBridge extends JavaPlugin {
         pluginManager.registerEvents(new MinecraftMessageListener(), this);
         pluginManager.registerEvents(new MinecraftJoinEvent(), this);
         pluginManager.registerEvents(new MinecraftQuitEvent(), this);
+    }
+
+    public static JavaPlugin getPlugin() {
+        return plugin;
+    }
+
+    public static IrcClient getIrcClient() {
+        return ircClient;
     }
 
 }

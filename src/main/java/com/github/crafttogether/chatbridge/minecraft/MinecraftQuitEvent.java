@@ -21,7 +21,7 @@ public class MinecraftQuitEvent implements Listener {
                 .color(Color.RED)
                 .title(String.format("%s has left the server", event.getPlayer().getName()))
                 .build();
-        client.getChannelById(Snowflake.of(ChatBridge.plugin.getConfig().getConfigurationSection("discord").getLong("discordChannelId")))
+        client.getChannelById(Snowflake.of(ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getLong("discordChannelId")))
                 .createMessage(embed.asRequest())
                 .block();
         try {

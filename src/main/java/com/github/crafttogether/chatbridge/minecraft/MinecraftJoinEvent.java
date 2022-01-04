@@ -21,7 +21,7 @@ public class MinecraftJoinEvent implements Listener {
                 .color(Color.GREEN)
                 .title(String.format("%s has joined the server", event.getPlayer().getName()))
                 .build();
-        client.getChannelById(Snowflake.of(ChatBridge.plugin.getConfig().getConfigurationSection("discord").getLong("discordChannelId")))
+        client.getChannelById(Snowflake.of(ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getLong("discordChannelId")))
                 .createMessage(embed.asRequest())
                 .block();
         try {

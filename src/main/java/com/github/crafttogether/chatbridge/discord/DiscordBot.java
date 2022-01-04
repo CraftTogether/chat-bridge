@@ -12,7 +12,7 @@ public class DiscordBot {
     public static void start() {
         Bukkit.getConsoleSender().sendMessage("Connecting to Discord");
 
-        final String token = ChatBridge.plugin.getConfig().getConfigurationSection("discord").getString("token");
+        final String token = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getString("token");
         client = DiscordClient.create(token);
         final GatewayDiscordClient gateway = client.login().block();
 

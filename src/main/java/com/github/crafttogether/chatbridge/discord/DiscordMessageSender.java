@@ -23,7 +23,7 @@ public class DiscordMessageSender {
         message = String.join(" ", args);
         if (message.length() == 0) return;
         try {
-            new Webhook(ChatBridge.plugin.getConfig().getConfigurationSection("discord").getString("webhook"))
+            new Webhook(ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getString("webhook"))
                     .setAvatarUrl(avatar)
                     .setUsername(username)
                     .setContent(source.icon + " " + message)
