@@ -2,13 +2,12 @@ package com.github.crafttogether.chatbridge.minecraft;
 
 import com.github.crafttogether.chatbridge.ChatBridge;
 import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
-import discord4j.common.util.Snowflake;
-import discord4j.core.spec.EmbedCreateSpec;
-import discord4j.rest.util.Color;
+import net.dv8tion.jda.api.EmbedBuilder;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.awt.*;
 import java.io.IOException;
 
 import static com.github.crafttogether.chatbridge.discord.DiscordBot.client;
@@ -17,13 +16,11 @@ public class MinecraftQuitEvent implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        EmbedCreateSpec embed = EmbedCreateSpec.builder()
-                .color(Color.RED)
-                .title(String.format("%s has left the server", event.getPlayer().getName()))
-                .build();
-        client.getChannelById(Snowflake.of(ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getLong("discordChannelId")))
-                .createMessage(embed.asRequest())
-                .subscribe();
+        final EmbedBuilder embed = new EmbedBuilder()
+                .setColor(Color.RED)
+                .setTitle(String.format("%s has left the server", event.getPlayer().getName()));
+        final long channelId = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getLong("discordChannelId");
+        client.getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
         try {
             IrcMessageSender.send(String.format("\u00034%s has left the server", event.getPlayer().getName()));
         } catch (IOException e) {

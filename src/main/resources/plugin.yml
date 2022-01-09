@@ -1,4 +1,4 @@
 name: ChatBridge
-version: '${project.version}'
+version: '${version}'
 main: com.github.crafttogether.chatbridge.ChatBridge
-api-version: 1.17
+api-version: 1.18

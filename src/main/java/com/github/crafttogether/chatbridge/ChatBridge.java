@@ -17,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -74,8 +75,11 @@ public class ChatBridge extends JavaPlugin {
         // Discord thread
         new Thread(() -> {
             logger.info("Discord Thread started");
-            DiscordBot.start();
-
+            try {
+                DiscordBot.start();
+            } catch (LoginException e) {
+                e.printStackTrace();
+            }
         }).start();
 
         // IRC thread

@@ -1,23 +1,24 @@
 package com.github.crafttogether.chatbridge.discord;
 
 import com.github.crafttogether.chatbridge.ChatBridge;
-import discord4j.core.DiscordClient;
-import discord4j.core.GatewayDiscordClient;
-import discord4j.core.event.domain.message.MessageCreateEvent;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.bukkit.Bukkit;
 
-public class DiscordBot {
-    public static DiscordClient client;
+import javax.security.auth.login.LoginException;
 
-    public static void start() {
+public class DiscordBot {
+    public static JDA client;
+
+    public static void start() throws LoginException {
         Bukkit.getConsoleSender().sendMessage("Connecting to Discord");
 
         final String token = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getString("token");
-        client = DiscordClient.create(token);
-        final GatewayDiscordClient gateway = client.login().block();
-
-        final MessageListener listener = new MessageListener();
-        gateway.on(MessageCreateEvent.class).subscribe(listener::onGuildMessageReceived);
+        client = JDABuilder.createDefault(token)
+                .setEnabledIntents(GatewayIntent.GUILD_MESSAGES)
+                .addEventListeners(new MessageListener())
+                .build();
     }
 
 }
