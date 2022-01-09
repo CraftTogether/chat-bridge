@@ -65,7 +65,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                    <outputDirectory>D:\Projektdateien\paperMcTestServer\plugins</outputDirectory>
+                    <outputDirectory>D:\Projektdateien\Craft Together\test server\plugins</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
@@ -94,6 +94,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20201115</version>
+        </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>

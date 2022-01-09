@@ -1,5 +1,6 @@
 discord:
   token: your_token
+  guildId: guild_id
   discordChannelId: channel_id
   minecraftPrefix: some_prefix
   webhook: some_webhook
