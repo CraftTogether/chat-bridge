@@ -15,7 +15,7 @@ public class DiscordBot {
         Bukkit.getConsoleSender().sendMessage("Connecting to Discord");
 
         final String token = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getString("token");
-        client = JDABuilder.createDefault(token)
+        client = JDABuilder.createLight(token)
                 .setEnabledIntents(GatewayIntent.GUILD_MESSAGES)
                 .addEventListeners(new MessageListener())
                 .build();
