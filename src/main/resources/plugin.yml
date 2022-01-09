@@ -2,3 +2,10 @@ name: ChatBridge
 version: '${version}'
 main: com.github.crafttogether.chatbridge.ChatBridge
 api-version: 1.18
+commands:
+  verify:
+    description: Confirm your verfification
+    usage: /<command> <code>
+  unlink:
+    description: Unlink your minecraft - discord connection
+    usage: /<command>

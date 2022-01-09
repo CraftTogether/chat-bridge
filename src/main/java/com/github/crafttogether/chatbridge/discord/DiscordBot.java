@@ -17,7 +17,7 @@ public class DiscordBot {
         final String token = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getString("token");
         client = JDABuilder.createLight(token)
                 .setEnabledIntents(GatewayIntent.GUILD_MESSAGES)
-                .addEventListeners(new MessageListener())
+                .addEventListeners(new MessageListener(), new LinkCommand())
                 .build();
     }
 
