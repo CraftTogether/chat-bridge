@@ -23,7 +23,7 @@ public class MinecraftQuitEvent implements Listener {
                 .build();
         client.getChannelById(Snowflake.of(ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getLong("discordChannelId")))
                 .createMessage(embed.asRequest())
-                .block();
+                .subscribe();
         try {
             IrcMessageSender.send(String.format("\u00034%s has left the server", event.getPlayer().getName()));
         } catch (IOException e) {
