@@ -6,6 +6,8 @@ import com.github.crafttogether.chatbridge.irc.OnDisconnect;
 import com.github.crafttogether.chatbridge.irc.OnPrivMessage;
 import com.github.crafttogether.chatbridge.irc.OnWelcomeMessage;
 import com.github.crafttogether.chatbridge.minecraft.*;
+import com.github.crafttogether.chatbridge.minecraft.commands.UnlinkCommand;
+import com.github.crafttogether.chatbridge.minecraft.commands.VerifyCommand;
 import dev.polarian.ircj.IrcClient;
 import dev.polarian.ircj.objects.Config;
 import org.bukkit.Bukkit;

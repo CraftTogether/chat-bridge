@@ -1,4 +1,4 @@
-package com.github.crafttogether.chatbridge.minecraft;
+package com.github.crafttogether.chatbridge.minecraft.commands;
 
 import com.github.crafttogether.chatbridge.discord.LinkCommand;
 import com.github.crafttogether.chatbridge.utilities.Members;
