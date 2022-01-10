@@ -19,6 +19,12 @@ public class DiscordBot {
                 .setEnabledIntents(GatewayIntent.GUILD_MESSAGES)
                 .addEventListeners(new MessageListener(), new LinkCommand())
                 .build();
+        try {
+            client.awaitReady();
+            ChatBridge.setDiscordConnected(true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

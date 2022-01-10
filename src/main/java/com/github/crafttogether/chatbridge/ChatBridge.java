@@ -30,8 +30,8 @@ public class ChatBridge extends JavaPlugin {
     private static IrcClient ircClient;
 
     // Variables to store the connection state of discord and irc to ensure they are both connected
-    public static boolean discordConnected = false;
-    public static boolean ircConnected = false;
+    private static boolean discordConnected = false;
+    private static boolean ircConnected = false;
 
     @Override
     public void onEnable() {
@@ -80,6 +80,14 @@ public class ChatBridge extends JavaPlugin {
             }
         }).start();
 
+        if (!discordConnected) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         // IRC thread
         new Thread(() -> {
             try {
@@ -89,6 +97,14 @@ public class ChatBridge extends JavaPlugin {
                 e.printStackTrace();
             }
         }).start();
+
+        if (!ircConnected) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
         registerEvents();
@@ -111,4 +127,19 @@ public class ChatBridge extends JavaPlugin {
         return ircClient;
     }
 
+    public static boolean isIrcConnected() {
+        return ircConnected;
+    }
+
+    public static void setIrcConnected(boolean connected) {
+        ircConnected = connected;
+    }
+
+    public static void setDiscordConnected(boolean connected) {
+        discordConnected = connected;
+    }
+
+    public static boolean getDiscordConnected() {
+        return discordConnected;
+    }
 }
