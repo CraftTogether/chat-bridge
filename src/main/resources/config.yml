@@ -1,14 +1,14 @@
 discord:
-  token: your_token
-  guildId: guild_id
-  discordChannelId: channel_id
-  minecraftPrefix: some_prefix
-  webhook: some_webhook
+  token: your_token # The discord token for the bot which is added to the discord which contains the channel you would like to bridge
+  guildId: guild_id # The ID fo the discord server which contains the channel you would like to bridge
+  discordChannelId: channel_id # The ID of discord channel which you would like to bridge
+  minecraftPrefix: "[Discord]:" # The prefix added to the messages sent to discord
+  webhook: some_webhook # The webhook of the discord channel where the bridged messages will be sent
 irc:
-  username: irc_username
-  hostname: irc_hostname
-  port: irc_port
-  tls: is_tls_enabled
-  timeout: connection_timeout
-  channel: irc_channel
-  prefix: some_prefix
+  username: MinecraftBridge # The name of the bot on the IRC server
+  hostname: irc_hostname # The hostname or ip of the irc server
+  port: 6697 # Default TLS port: 6697, if encryption is not available default port is 6667 (ensure to change tls to false)
+  tls: true # Default: true --> TLS encryption is used for security
+  timeout: 5 # Number of seconds the client will wait to attempt to connect to the IRC server before timing out, default: 5 seconds
+  channel: irc_channel # The name of the IRC channel, hashtag prefix is automatically added
+  prefix: "[IRC:]" # The prefix added to the messages sent to discord
