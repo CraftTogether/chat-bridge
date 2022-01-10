@@ -13,6 +13,7 @@ public class DiscordMessageSender {
     private static final Logger logger = LoggerFactory.getLogger(DiscordMessageSender.class);
 
     public static void send(String username, String message, String avatar, MessageSource source) {
+        if (!ChatBridge.isLoaded()) return;
         // check if the message pings @everyone or @here
         String[] args = message.split("\s+");
         for (int i = 0; i < args.length; i++) {
