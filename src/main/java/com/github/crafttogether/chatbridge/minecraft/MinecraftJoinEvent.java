@@ -24,6 +24,7 @@ public class MinecraftJoinEvent implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        if (!ChatBridge.getDiscordConnected()) return;
         assignColor(event.getPlayer());
 
         EmbedBuilder embed = new EmbedBuilder()
