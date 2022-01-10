@@ -25,7 +25,7 @@ dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT'
     implementation group: 'com.squareup.okhttp', name: 'okhttp', version: '2.7.5' // OkHttp
     implementation group: 'org.json', name: 'json', version: '20201115' // JSON
-    implementation group: "com.gitlab.PolarianDev", name: "ircj", version: "v1.0"
+    implementation "com.gitlab.PolarianDev:ircj:1.1-SNAPSHOT-2"
     implementation(group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.3') { // JDA
         exclude module: 'opus-java' // Without audio
     }
