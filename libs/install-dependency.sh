@@ -1,1 +1,1 @@
-mvn install:install-file -Dfile=./ircj-1.0-SNAPSHOT-7.jar -DgroupId=dev.polarian -DartifactId=ircj -Dversion=1.0-SNAPSHOT-7 -Dpackaging=jar
+mvn install:install-file -Dfile=./ircj-1.0-SNAPSHOT-8.jar -DgroupId=dev.polarian -DartifactId=ircj -Dversion=1.0-SNAPSHOT-8 -Dpackaging=jar
