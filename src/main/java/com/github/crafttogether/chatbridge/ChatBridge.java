@@ -9,6 +9,7 @@ import com.github.crafttogether.chatbridge.minecraft.*;
 import com.github.crafttogether.chatbridge.minecraft.commands.UnlinkCommand;
 import com.github.crafttogether.chatbridge.minecraft.commands.VerifyCommand;
 import dev.polarian.ircj.IrcClient;
+import dev.polarian.ircj.UserMode;
 import dev.polarian.ircj.objects.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -64,7 +65,9 @@ public class ChatBridge extends JavaPlugin {
                 .setHostname(section.getString("hostname"))
                 .setPort(section.getInt("port"))
                 .setTimeout(section.getInt("timeout") * 1000) // multiply by 1000 to convert seconds to milliseconds
-                .setTls(section.getBoolean("tls"));
+                .setTls(section.getBoolean("tls"))
+                .setRealName(nickname)
+                .setUserMode(UserMode.NONE);
 
         ircClient = new IrcClient(config);
         ircClient.addWelcomeEventListener(new OnWelcomeMessage());
