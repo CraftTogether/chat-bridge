@@ -2,6 +2,8 @@ name: ChatBridge
 version: '${version}'
 main: com.github.crafttogether.chatbridge.ChatBridge
 api-version: 1.18
+depend:
+  - Kelp
 commands:
   verify:
     description: Confirm your verfification
