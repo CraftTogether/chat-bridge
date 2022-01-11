@@ -3,6 +3,7 @@ package com.github.crafttogether.chatbridge.minecraft;
 import com.github.crafttogether.chatbridge.ChatBridge;
 import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
 import com.github.crafttogether.chatbridge.utilities.Members;
+import com.github.crafttogether.kelp.Kelp;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.kyori.adventure.text.TextComponent;
@@ -18,8 +19,6 @@ import org.json.JSONObject;
 import java.awt.*;
 import java.io.IOException;
 
-import static com.github.crafttogether.chatbridge.discord.DiscordBot.client;
-
 public class MinecraftJoinEvent implements Listener {
 
     @EventHandler
@@ -31,7 +30,7 @@ public class MinecraftJoinEvent implements Listener {
                 .setColor(Color.GREEN)
                 .setTitle(String.format("%s has joined the server", event.getPlayer().getName()));
         final long channelId = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getLong("discordChannelId");
-        client.getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
+        Kelp.jda.getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
         try {
             IrcMessageSender.send(String.format("\u00033%s has joined the server", event.getPlayer().getName()));
         } catch (IOException error) {
@@ -51,7 +50,7 @@ public class MinecraftJoinEvent implements Listener {
                 final String guildId = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getString("guildId");
                 if (guildId == null) return;
 
-                final Guild guild = client.getGuildById(guildId);
+                final Guild guild = Kelp.jda.getGuildById(guildId);
                 guild.retrieveMemberById(discordId).queue(member -> {
                     final Color colour = member.getColor();
                     final int r = colour.getRed();

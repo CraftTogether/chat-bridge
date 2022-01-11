@@ -1,5 +1,4 @@
 discord:
-  token: your_token # The discord token for the bot which is added to the discord which contains the channel you would like to bridge
   guildId: guild_id # The ID fo the discord server which contains the channel you would like to bridge
   discordChannelId: channel_id # The ID of discord channel which you would like to bridge
   minecraftPrefix: "[Discord]:" # The prefix added to the messages sent to discord

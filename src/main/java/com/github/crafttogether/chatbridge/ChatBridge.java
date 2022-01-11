@@ -1,6 +1,7 @@
 package com.github.crafttogether.chatbridge;
 
-import com.github.crafttogether.chatbridge.discord.DiscordBot;
+import com.github.crafttogether.chatbridge.discord.LinkCommand;
+import com.github.crafttogether.chatbridge.discord.MessageListener;
 import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
 import com.github.crafttogether.chatbridge.irc.OnDisconnect;
 import com.github.crafttogether.chatbridge.irc.OnPrivMessage;
@@ -8,6 +9,7 @@ import com.github.crafttogether.chatbridge.irc.OnWelcomeMessage;
 import com.github.crafttogether.chatbridge.minecraft.*;
 import com.github.crafttogether.chatbridge.minecraft.commands.UnlinkCommand;
 import com.github.crafttogether.chatbridge.minecraft.commands.VerifyCommand;
+import com.github.crafttogether.kelp.Kelp;
 import dev.polarian.ircj.IrcClient;
 import dev.polarian.ircj.UserMode;
 import dev.polarian.ircj.objects.Config;
@@ -77,15 +79,7 @@ public class ChatBridge extends JavaPlugin {
         IrcMessageSender.channel = ircChannel.get(0);
         IrcMessageSender.client = ircClient;
 
-        // Discord thread
-        new Thread(() -> {
-            logger.info("Discord Thread started");
-            try {
-                DiscordBot.start();
-            } catch (LoginException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        Kelp.addListeners(new MessageListener(), new LinkCommand());
 
         // IRC thread
         new Thread(() -> {
