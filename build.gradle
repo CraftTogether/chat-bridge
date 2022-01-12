@@ -26,7 +26,7 @@ dependencies {
     implementation group: 'com.squareup.okhttp', name: 'okhttp', version: '2.7.5' // OkHttp
     implementation group: 'org.json', name: 'json', version: '20201115' // JSON
     implementation "com.gitlab.PolarianDev:ircj:1.1-SNAPSHOT-3"
-    compileOnly "com.github.CraftTogether:Kelp:736c54a3fb"
+    compileOnly "com.github.CraftTogether:Kelp:1.0-SNAPSHOT-8"
     compileOnly "net.dv8tion:JDA:5.0.0-alpha.4"
 }
 
