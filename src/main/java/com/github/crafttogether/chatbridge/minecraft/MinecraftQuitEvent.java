@@ -19,7 +19,7 @@ public class MinecraftQuitEvent implements Listener {
                 .setColor(Color.RED)
                 .setTitle(String.format("%s has left the server", event.getPlayer().getName()));
         final long channelId = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getLong("discordChannelId");
-        Kelp.jda.getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
+        Kelp.getClient().getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
         try {
             IrcMessageSender.send(String.format("\u00034%s has left the server", event.getPlayer().getName()));
         } catch (IOException e) {

@@ -30,7 +30,7 @@ public class MinecraftJoinEvent implements Listener {
                 .setColor(Color.GREEN)
                 .setTitle(String.format("%s has joined the server", event.getPlayer().getName()));
         final long channelId = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getLong("discordChannelId");
-        Kelp.jda.getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
+        Kelp.getClient().getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
         try {
             IrcMessageSender.send(String.format("\u00033%s has joined the server", event.getPlayer().getName()));
         } catch (IOException error) {
@@ -50,7 +50,7 @@ public class MinecraftJoinEvent implements Listener {
                 final String guildId = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getString("guildId");
                 if (guildId == null) return;
 
-                final Guild guild = Kelp.jda.getGuildById(guildId);
+                final Guild guild = Kelp.getClient().getGuildById(guildId);
                 guild.retrieveMemberById(discordId).queue(member -> {
                     final Color colour = member.getColor();
                     final int r = colour.getRed();
