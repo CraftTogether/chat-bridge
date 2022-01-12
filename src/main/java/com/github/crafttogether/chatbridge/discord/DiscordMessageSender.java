@@ -3,6 +3,7 @@ package com.github.crafttogether.chatbridge.discord;
 import com.github.crafttogether.chatbridge.ChatBridge;
 import com.github.crafttogether.chatbridge.MessageSource;
 import com.github.crafttogether.chatbridge.utilities.Webhook;
+import com.github.crafttogether.kelp.Kelp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,7 @@ public class DiscordMessageSender {
     private static final Logger logger = LoggerFactory.getLogger(DiscordMessageSender.class);
 
     public static void send(String username, String message, String avatar, MessageSource source) {
-        if (!ChatBridge.isLoaded()) return;
+        if (!Kelp.isConnected()) return;
         // check if the message pings @everyone or @here
         String[] args = message.split("\s+");
         for (int i = 0; i < args.length; i++) {

@@ -10,7 +10,7 @@ public class IrcMessageSender {
     public static String channel;
 
     public static void send(String message) throws IOException {
-        if (!ChatBridge.isLoaded() || !ChatBridge.isIrcConnected()) return;
+        if (!ChatBridge.isIrcConnected()) return;
         client.command.sendMessage(channel, message);
     }
 }

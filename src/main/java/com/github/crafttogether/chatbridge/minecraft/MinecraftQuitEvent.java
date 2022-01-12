@@ -15,6 +15,7 @@ public class MinecraftQuitEvent implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        if (!Kelp.isConnected()) return;
         final EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Color.RED)
                 .setTitle(String.format("%s has left the server", event.getPlayer().getName()));
