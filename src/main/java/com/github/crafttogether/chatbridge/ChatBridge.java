@@ -6,7 +6,9 @@ import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
 import com.github.crafttogether.chatbridge.irc.OnDisconnect;
 import com.github.crafttogether.chatbridge.irc.OnPrivMessage;
 import com.github.crafttogether.chatbridge.irc.OnWelcomeMessage;
-import com.github.crafttogether.chatbridge.minecraft.*;
+import com.github.crafttogether.chatbridge.minecraft.MinecraftJoinEvent;
+import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageListener;
+import com.github.crafttogether.chatbridge.minecraft.MinecraftQuitEvent;
 import com.github.crafttogether.chatbridge.minecraft.commands.UnlinkCommand;
 import com.github.crafttogether.chatbridge.minecraft.commands.VerifyCommand;
 import com.github.crafttogether.kelp.Kelp;
@@ -21,7 +23,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

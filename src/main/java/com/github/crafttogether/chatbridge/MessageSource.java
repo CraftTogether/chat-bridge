@@ -6,6 +6,7 @@ public enum MessageSource {
     IRC(ChatBridge.getPlugin().getConfig().getConfigurationSection("irc").getString("prefix"));
 
     public final String icon;
+
     MessageSource(String icon) {
         this.icon = icon;
     }
