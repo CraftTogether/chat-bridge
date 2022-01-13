@@ -95,6 +95,11 @@ public class ChatBridge extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        try {
+            ircClient.command.disconnectAndDestroy("Chat Bridge has been disabled");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void registerEvents() {
