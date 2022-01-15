@@ -2,10 +2,7 @@ package com.github.crafttogether.chatbridge;
 
 import com.github.crafttogether.chatbridge.discord.LinkCommand;
 import com.github.crafttogether.chatbridge.discord.MessageListener;
-import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
-import com.github.crafttogether.chatbridge.irc.OnDisconnect;
-import com.github.crafttogether.chatbridge.irc.OnPrivMessage;
-import com.github.crafttogether.chatbridge.irc.OnWelcomeMessage;
+import com.github.crafttogether.chatbridge.irc.*;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftJoinEvent;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageListener;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftQuitEvent;
@@ -34,7 +31,11 @@ public class ChatBridge extends JavaPlugin {
     private static final Logger logger = LoggerFactory.getLogger(ChatBridge.class);
 
     private static JavaPlugin plugin;
-    private static IrcClient ircClient;
+    private static IrcConnection ircConnection;
+
+    private static int reconnectAttempts;
+    private static int reconnectDelay;
+    private static int remainingAttempts;
 
     // Variables to store the connection state of discord and irc to ensure they are both connected
     private static boolean ircConnected = false;
@@ -49,8 +50,19 @@ public class ChatBridge extends JavaPlugin {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        createIrcConnection();
+        Kelp.addListeners(new MessageListener(), new LinkCommand());
 
-        final ConfigurationSection section = this.getConfig().getConfigurationSection("irc");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
+        registerEvents();
+    }
+
+    public static void createIrcConnection() {
+        if (ircConnection != null) {
+            logger.error("Attempted to create a new IRC connection, but IRC connection already exists");
+            return;
+        }
+        final ConfigurationSection section = ChatBridge.getPlugin().getConfig().getConfigurationSection("irc");
         assert section != null;
         final Config config = new Config();
 
@@ -58,7 +70,6 @@ public class ChatBridge extends JavaPlugin {
             add("#" + section.getString("channel"));
         }};
         final String nickname = section.getString("username");
-
         config
                 .setUsername(nickname)
                 .setNickname(nickname)
@@ -70,35 +81,24 @@ public class ChatBridge extends JavaPlugin {
                 .setRealName(nickname)
                 .setUserMode(UserMode.NONE);
 
-        ircClient = new IrcClient(config);
+        IrcClient ircClient = new IrcClient(config);
         ircClient.addWelcomeEventListener(new OnWelcomeMessage());
         ircClient.addPrivMessageEventListener(new OnPrivMessage());
         ircClient.addDisconnectEventListener(new OnDisconnect());
 
-        IrcMessageSender.channel = ircChannel.get(0);
-        IrcMessageSender.client = ircClient;
-
-        Kelp.addListeners(new MessageListener(), new LinkCommand());
-
-        // IRC thread
-        new Thread(() -> {
-            try {
-                logger.info("IRC Thread started");
-                ircClient.connect();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
-        registerEvents();
+        reconnectAttempts = section.getInt("reconnectAttempts");
+        reconnectDelay = section.getInt("reconnectDelay");
+        IrcMessageSender.setChannel(ircChannel.get(0));
+        ircConnection = new IrcConnection(ircClient);
+        ircConnection.start();
     }
 
     @Override
     public void onDisable() {
         try {
-            ircClient.command.disconnectAndDestroy("Chat Bridge has been disabled");
-        } catch (IOException e) {
+            ircConnection.getClient().command.disconnect("Chat Bridge has been disabled");
+            ircConnection.join();
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -116,8 +116,8 @@ public class ChatBridge extends JavaPlugin {
         return plugin;
     }
 
-    public static IrcClient getIrcClient() {
-        return ircClient;
+    public static IrcConnection getIrcThread() {
+        return ircConnection;
     }
 
     public static boolean isIrcConnected() {
@@ -126,5 +126,21 @@ public class ChatBridge extends JavaPlugin {
 
     public static void setIrcConnected(boolean connected) {
         ircConnected = connected;
+    }
+
+    public static void resetAttempts() {
+        remainingAttempts = reconnectAttempts;
+    }
+
+    public static int getRemainingAttempts() {
+        return remainingAttempts;
+    }
+
+    public static void decrementRemainingAttempts() {
+        remainingAttempts--;
+    }
+
+    public static int getReconnectDelay() {
+        return reconnectDelay;
     }
 }

@@ -1,15 +1,29 @@
 package com.github.crafttogether.chatbridge.irc;
 
 import com.github.crafttogether.chatbridge.ChatBridge;
+import dev.polarian.ircj.DisconnectReason;
 import dev.polarian.ircj.events.DisconnectEvent;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OnDisconnect implements DisconnectEvent {
+    private static final Logger logger = LoggerFactory.getLogger(OnDisconnect.class);
+
     @Override
-    public void invoke() {
+    public void invoke(DisconnectReason reason, Exception e) {
+        logger.warn("Disconnected from IRC server for reason: " + reason.toString().toLowerCase());
         ChatBridge.setIrcConnected(false);
-        Bukkit.getServer().sendMessage(PlainTextComponentSerializer.plainText().deserialize(ChatColor.RED + "[Chat Bridge]: Disconnected from IRC server!"));
+        switch (reason) {
+            case TIMEOUT:
+                if (ChatBridge.getRemainingAttempts() > 0) ChatBridge.createIrcConnection();
+                ChatBridge.decrementRemainingAttempts();
+                break;
+
+            case FORCE_DISCONNECTED:
+                return;
+
+            case ERROR:
+                logger.error(e.getMessage());
+        }
     }
 }

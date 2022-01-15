@@ -8,5 +8,6 @@ public class OnWelcomeMessage implements WelcomeEvent {
     @Override
     public void invoke(WelcomeMessage message) {
         ChatBridge.setIrcConnected(true);
+        ChatBridge.resetAttempts();
     }
 }
