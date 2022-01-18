@@ -40,23 +40,6 @@ public class ChatBridge extends JavaPlugin {
     // Variables to store the connection state of discord and irc to ensure they are both connected
     private static boolean ircConnected = false;
 
-    @Override
-    public void onEnable() {
-        plugin = this;
-        getConfig().options().copyDefaults();
-        saveDefaultConfig();
-        try {
-            getConfig().load(Files.newBufferedReader(Path.of(plugin.getDataFolder() + "/config.yml")));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        createIrcConnection();
-        Kelp.addListeners(new MessageListener(), new LinkCommand());
-
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
-        registerEvents();
-    }
-
     public static void createIrcConnection() {
         if (ircConnection != null) {
             logger.error("Attempted to create a new IRC connection, but IRC connection already exists");
@@ -93,25 +76,6 @@ public class ChatBridge extends JavaPlugin {
         ircConnection.start();
     }
 
-    @Override
-    public void onDisable() {
-        try {
-            ircConnection.getClient().command.disconnect("Chat Bridge has been disabled");
-            ircConnection.join();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void registerEvents() {
-        final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-        pluginManager.registerEvents(new MinecraftMessageListener(), this);
-        pluginManager.registerEvents(new MinecraftJoinEvent(), this);
-        pluginManager.registerEvents(new MinecraftQuitEvent(), this);
-        Bukkit.getPluginCommand("verify").setExecutor(new VerifyCommand());
-        Bukkit.getPluginCommand("unlink").setExecutor(new UnlinkCommand());
-    }
-
     public static JavaPlugin getPlugin() {
         return plugin;
     }
@@ -142,5 +106,41 @@ public class ChatBridge extends JavaPlugin {
 
     public static int getReconnectDelay() {
         return reconnectDelay;
+    }
+
+    @Override
+    public void onEnable() {
+        plugin = this;
+        getConfig().options().copyDefaults();
+        saveDefaultConfig();
+        try {
+            getConfig().load(Files.newBufferedReader(Path.of(plugin.getDataFolder() + "/config.yml")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        createIrcConnection();
+        Kelp.addListeners(new MessageListener(), new LinkCommand());
+
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
+        registerEvents();
+    }
+
+    @Override
+    public void onDisable() {
+        try {
+            ircConnection.getClient().command.disconnect("Chat Bridge has been disabled");
+            ircConnection.join();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void registerEvents() {
+        final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
+        pluginManager.registerEvents(new MinecraftMessageListener(), this);
+        pluginManager.registerEvents(new MinecraftJoinEvent(), this);
+        pluginManager.registerEvents(new MinecraftQuitEvent(), this);
+        Bukkit.getPluginCommand("verify").setExecutor(new VerifyCommand());
+        Bukkit.getPluginCommand("unlink").setExecutor(new UnlinkCommand());
     }
 }
