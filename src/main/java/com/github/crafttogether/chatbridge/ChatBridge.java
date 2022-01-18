@@ -1,5 +1,6 @@
 package com.github.crafttogether.chatbridge;
 
+import com.github.crafttogether.chatbridge.discord.DiscordMessageSender;
 import com.github.crafttogether.chatbridge.discord.LinkCommand;
 import com.github.crafttogether.chatbridge.discord.MessageListener;
 import com.github.crafttogether.chatbridge.irc.*;
@@ -120,6 +121,7 @@ public class ChatBridge extends JavaPlugin {
         }
         createIrcConnection();
         Kelp.addListeners(new MessageListener(), new LinkCommand());
+        DiscordMessageSender.send("Server", ":white_check_mark: Chat bridge enabled", null, MessageSource.OTHER);
 
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
         registerEvents();
@@ -127,6 +129,7 @@ public class ChatBridge extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        DiscordMessageSender.send("Server", ":octagonal_sign: Chat bridge disabled",  null, MessageSource.OTHER);
         try {
             ircConnection.getClient().command.disconnect("Chat Bridge has been disabled");
             ircConnection.join();
