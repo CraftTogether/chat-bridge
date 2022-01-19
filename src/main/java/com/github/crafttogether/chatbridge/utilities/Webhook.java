@@ -1,6 +1,7 @@
 package com.github.crafttogether.chatbridge.utilities;
 
 import okhttp3.*;
+import org.bukkit.Bukkit;
 import org.json.JSONObject;
 
 import java.awt.*;
@@ -69,13 +70,14 @@ public class Webhook {
         // Send a webhook message
         final RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), getAsJSONObject().toString());
 
-        Request request = new Request.Builder()
+        final Request request = new Request.Builder()
                 .url(url)
                 .post(body)
                 .build();
-
-        final Call call = client.newCall(request); // Create call
-        call.execute(); // Execute call
+        try (final Response ignored = client.newCall(request).execute()) {
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("Failed to send a webhook message");
+        }
     }
 
     /**
