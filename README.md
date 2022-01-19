@@ -1,5 +1,5 @@
 # Minecraft Chat Bridge
-A simple, efficient 3 way bridge between Discord, IRC and Minecraft, using 
+A simple, efficient 3 way bridge between Discord, IRC (optional) and Minecraft, using 
 [JDA](https://github.com/DV8FromTheWorld/JDA) and [IRCJ](https://gitlab.com/PolarianDev/ircj) <BR>
 
 **Note:** This is not a Bridge which supports all 3 platforms, but bridges all 3 together, if you
