@@ -2,10 +2,18 @@ name: ChatBridge
 version: '${version}'
 main: com.github.crafttogether.chatbridge.ChatBridge
 api-version: 1.18
+depend:
+  - Kelp
 commands:
   verify:
     description: Confirm your verfification
     usage: /<command> <code>
   unlink:
     description: Unlink your minecraft - discord connection
+    usage: /<command>
+  reconnectirc:
+    description: reconnect to IRC daemon which is defined in the config
+    usage: /<command> <force reconnect>
+  disconnectirc:
+    description: disconnect from the IRC daemon
     usage: /<command>

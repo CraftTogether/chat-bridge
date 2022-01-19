@@ -1,13 +1,17 @@
 package com.github.crafttogether.chatbridge;
 
-import com.github.crafttogether.chatbridge.discord.DiscordBot;
-import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
-import com.github.crafttogether.chatbridge.irc.OnDisconnect;
-import com.github.crafttogether.chatbridge.irc.OnPrivMessage;
-import com.github.crafttogether.chatbridge.irc.OnWelcomeMessage;
-import com.github.crafttogether.chatbridge.minecraft.*;
+import com.github.crafttogether.chatbridge.discord.DiscordMessageSender;
+import com.github.crafttogether.chatbridge.discord.LinkCommand;
+import com.github.crafttogether.chatbridge.discord.MessageListener;
+import com.github.crafttogether.chatbridge.irc.*;
+import com.github.crafttogether.chatbridge.minecraft.MinecraftJoinEvent;
+import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageListener;
+import com.github.crafttogether.chatbridge.minecraft.MinecraftQuitEvent;
+import com.github.crafttogether.chatbridge.minecraft.commands.DisconnectIrcCommand;
+import com.github.crafttogether.chatbridge.minecraft.commands.ReconnectIrcCommand;
 import com.github.crafttogether.chatbridge.minecraft.commands.UnlinkCommand;
 import com.github.crafttogether.chatbridge.minecraft.commands.VerifyCommand;
+import com.github.crafttogether.kelp.Kelp;
 import dev.polarian.ircj.IrcClient;
 import dev.polarian.ircj.UserMode;
 import dev.polarian.ircj.objects.Config;
@@ -19,7 +23,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,25 +34,24 @@ public class ChatBridge extends JavaPlugin {
     private static final Logger logger = LoggerFactory.getLogger(ChatBridge.class);
 
     private static JavaPlugin plugin;
-    private static IrcClient ircClient;
+    private static IrcConnection ircConnection;
+
+    private static int reconnectAttempts;
+    private static int reconnectDelay;
+    private static int remainingAttempts;
+    private static boolean ircEnabled;
 
     // Variables to store the connection state of discord and irc to ensure they are both connected
-    private static boolean discordConnected = false;
     private static boolean ircConnected = false;
-    private static boolean pluginLoaded = false;
 
-    @Override
-    public void onEnable() {
-        plugin = this;
-        getConfig().options().copyDefaults();
-        saveDefaultConfig();
-        try {
-            getConfig().load(Files.newBufferedReader(Path.of(plugin.getDataFolder() + "/config.yml")));
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static void createIrcConnection() {
+        if (ircConnection != null) {
+            if (ircConnection.isAlive()) {
+                logger.error("Attempted to create IRC connection, however connection already exists");
+                return;
+            }
         }
-
-        final ConfigurationSection section = this.getConfig().getConfigurationSection("irc");
+        final ConfigurationSection section = ChatBridge.getPlugin().getConfig().getConfigurationSection("irc");
         assert section != null;
         final Config config = new Config();
 
@@ -57,7 +59,6 @@ public class ChatBridge extends JavaPlugin {
             add("#" + section.getString("channel"));
         }};
         final String nickname = section.getString("username");
-
         config
                 .setUsername(nickname)
                 .setNickname(nickname)
@@ -69,59 +70,24 @@ public class ChatBridge extends JavaPlugin {
                 .setRealName(nickname)
                 .setUserMode(UserMode.NONE);
 
-        ircClient = new IrcClient(config);
+        IrcClient ircClient = new IrcClient(config);
         ircClient.addWelcomeEventListener(new OnWelcomeMessage());
         ircClient.addPrivMessageEventListener(new OnPrivMessage());
         ircClient.addDisconnectEventListener(new OnDisconnect());
 
-        IrcMessageSender.channel = ircChannel.get(0);
-        IrcMessageSender.client = ircClient;
-
-        // Discord thread
-        new Thread(() -> {
-            logger.info("Discord Thread started");
-            try {
-                DiscordBot.start();
-            } catch (LoginException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
-        // IRC thread
-        new Thread(() -> {
-            try {
-                logger.info("IRC Thread started");
-                ircClient.connect();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
-        pluginLoaded = true;
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
-        registerEvents();
-    }
-
-    @Override
-    public void onDisable() {
-        pluginLoaded = false;
-    }
-
-    private void registerEvents() {
-        final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-        pluginManager.registerEvents(new MinecraftMessageListener(), this);
-        pluginManager.registerEvents(new MinecraftJoinEvent(), this);
-        pluginManager.registerEvents(new MinecraftQuitEvent(), this);
-        Bukkit.getPluginCommand("verify").setExecutor(new VerifyCommand());
-        Bukkit.getPluginCommand("unlink").setExecutor(new UnlinkCommand());
+        reconnectAttempts = section.getInt("reconnectAttempts");
+        reconnectDelay = section.getInt("reconnectDelay");
+        IrcMessageSender.setChannel(ircChannel.get(0));
+        ircConnection = new IrcConnection(ircClient);
+        ircConnection.start();
     }
 
     public static JavaPlugin getPlugin() {
         return plugin;
     }
 
-    public static IrcClient getIrcClient() {
-        return ircClient;
+    public static IrcConnection getIrcThread() {
+        return ircConnection;
     }
 
     public static boolean isIrcConnected() {
@@ -132,15 +98,70 @@ public class ChatBridge extends JavaPlugin {
         ircConnected = connected;
     }
 
-    public static void setDiscordConnected(boolean connected) {
-        discordConnected = connected;
+    public static void resetAttempts() {
+        remainingAttempts = reconnectAttempts;
     }
 
-    public static boolean getDiscordConnected() {
-        return discordConnected;
+    public static int getRemainingAttempts() {
+        return remainingAttempts;
     }
 
-    public static boolean isLoaded() {
-        return pluginLoaded;
+    public static void decrementRemainingAttempts() {
+        remainingAttempts--;
+    }
+
+    public static int getReconnectDelay() {
+        return reconnectDelay;
+    }
+
+    public static boolean isIrcEnabled() {
+        return ircEnabled;
+    }
+
+    @Override
+    public void onEnable() {
+        plugin = this;
+        getConfig().options().copyDefaults();
+        saveDefaultConfig();
+        try {
+            getConfig().load(Files.newBufferedReader(Path.of(plugin.getDataFolder() + "/config.yml")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ircEnabled = getConfig().getConfigurationSection("irc").getBoolean("enabled");
+        if (ircEnabled) {
+            createIrcConnection();
+        }
+        Kelp.addListeners(new MessageListener(), new LinkCommand());
+        DiscordMessageSender.send("Server", ":white_check_mark: Chat bridge enabled", null, MessageSource.OTHER);
+
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
+        registerEvents();
+    }
+
+    @Override
+    public void onDisable() {
+        DiscordMessageSender.send("Server", ":octagonal_sign: Chat bridge disabled",  null, MessageSource.OTHER);
+        try {
+            if (ircConnection != null) {
+                if (ircConnection.isAlive()) {
+                    ircConnection.getClient().command.disconnect("Chat Bridge has been disabled");
+                    ircConnection.join();
+                }
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void registerEvents() {
+        final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
+        pluginManager.registerEvents(new MinecraftMessageListener(), this);
+        pluginManager.registerEvents(new MinecraftJoinEvent(), this);
+        pluginManager.registerEvents(new MinecraftQuitEvent(), this);
+        Bukkit.getPluginCommand("verify").setExecutor(new VerifyCommand());
+        Bukkit.getPluginCommand("unlink").setExecutor(new UnlinkCommand());
+        Bukkit.getPluginCommand("reconnectirc").setExecutor(new ReconnectIrcCommand());
+        Bukkit.getPluginCommand("disconnectirc").setExecutor(new DisconnectIrcCommand());
     }
 }

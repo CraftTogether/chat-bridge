@@ -125,6 +125,92 @@ public class Webhook {
         editCall.execute(); // Execute call
     }
 
+    private JSONObject getAsJSONObject() {
+        //this.content = content.replace("\n", "\\n"); // In JSON \n is \\n
+
+        JSONObject json = new JSONObject();
+
+        json.put("content", this.content);
+        json.put("username", this.username);
+        json.put("avatar_url", this.avatarUrl);
+        json.put("tts", this.tts);
+
+        if (!this.embeds.isEmpty()) {
+            List<JSONObject> embedObjects = new ArrayList<>();
+
+            for (EmbedObject embed : this.embeds) {
+                JSONObject jsonEmbed = new JSONObject();
+
+                jsonEmbed.put("title", embed.getTitle());
+                jsonEmbed.put("description", embed.getDescription());
+                jsonEmbed.put("url", embed.getUrl());
+
+                if (embed.getColor() != null) {
+                    Color color = embed.getColor();
+                    int rgb = color.getRed();
+                    rgb = (rgb << 8) + color.getGreen();
+                    rgb = (rgb << 8) + color.getBlue();
+
+                    jsonEmbed.put("color", rgb);
+                }
+
+                EmbedObject.Footer footer = embed.getFooter();
+                EmbedObject.Image image = embed.getImage();
+                EmbedObject.Thumbnail thumbnail = embed.getThumbnail();
+                EmbedObject.Author author = embed.getAuthor();
+                List<EmbedObject.Field> fields = embed.getFields();
+
+                if (footer != null) {
+                    JSONObject jsonFooter = new JSONObject();
+
+                    jsonFooter.put("text", footer.getText());
+                    jsonFooter.put("icon_url", footer.getIconUrl());
+                    jsonEmbed.put("footer", jsonFooter);
+                }
+
+                if (image != null) {
+                    JSONObject jsonImage = new JSONObject();
+
+                    jsonImage.put("url", image.getUrl());
+                    jsonEmbed.put("image", jsonImage);
+                }
+
+                if (thumbnail != null) {
+                    JSONObject jsonThumbnail = new JSONObject();
+
+                    jsonThumbnail.put("url", thumbnail.getUrl());
+                    jsonEmbed.put("thumbnail", jsonThumbnail);
+                }
+
+                if (author != null) {
+                    JSONObject jsonAuthor = new JSONObject();
+
+                    jsonAuthor.put("name", author.getName());
+                    jsonAuthor.put("url", author.getUrl());
+                    jsonAuthor.put("icon_url", author.getIconUrl());
+                    jsonEmbed.put("author", jsonAuthor);
+                }
+
+                List<JSONObject> jsonFields = new ArrayList<>();
+                for (EmbedObject.Field field : fields) {
+                    JSONObject jsonField = new JSONObject();
+
+                    jsonField.put("name", field.getName());
+                    jsonField.put("value", field.getValue());
+                    jsonField.put("inline", field.isInline());
+
+                    jsonFields.add(jsonField);
+                }
+
+                jsonEmbed.put("fields", jsonFields.toArray());
+                embedObjects.add(jsonEmbed);
+            }
+
+            json.put("embeds", embedObjects.toArray());
+        }
+        return json;
+    }
+
     public static class EmbedObject {
         private String title;
         private String description;
@@ -141,16 +227,36 @@ public class Webhook {
             return title;
         }
 
+        public EmbedObject setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
         public String getDescription() {
             return description;
+        }
+
+        public EmbedObject setDescription(String description) {
+            this.description = description;
+            return this;
         }
 
         public String getUrl() {
             return url;
         }
 
+        public EmbedObject setUrl(String url) {
+            this.url = url;
+            return this;
+        }
+
         public Color getColor() {
             return color;
+        }
+
+        public EmbedObject setColor(Color color) {
+            this.color = color;
+            return this;
         }
 
         public Footer getFooter() {
@@ -161,8 +267,18 @@ public class Webhook {
             return thumbnail;
         }
 
+        public EmbedObject setThumbnail(String url) {
+            this.thumbnail = new Thumbnail(url);
+            return this;
+        }
+
         public Image getImage() {
             return image;
+        }
+
+        public EmbedObject setImage(String url) {
+            this.image = new Image(url);
+            return this;
         }
 
         public Author getAuthor() {
@@ -173,38 +289,8 @@ public class Webhook {
             return fields;
         }
 
-        public EmbedObject setTitle(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public EmbedObject setDescription(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public EmbedObject setUrl(String url) {
-            this.url = url;
-            return this;
-        }
-
-        public EmbedObject setColor(Color color) {
-            this.color = color;
-            return this;
-        }
-
         public EmbedObject setFooter(String text, String icon) {
             this.footer = new Footer(text, icon);
-            return this;
-        }
-
-        public EmbedObject setThumbnail(String url) {
-            this.thumbnail = new Thumbnail(url);
-            return this;
-        }
-
-        public EmbedObject setImage(String url) {
-            this.image = new Image(url);
             return this;
         }
 
@@ -307,91 +393,5 @@ public class Webhook {
                 return inline;
             }
         }
-    }
-
-    private JSONObject getAsJSONObject() {
-        //this.content = content.replace("\n", "\\n"); // In JSON \n is \\n
-
-        JSONObject json = new JSONObject();
-
-        json.put("content", this.content);
-        json.put("username", this.username);
-        json.put("avatar_url", this.avatarUrl);
-        json.put("tts", this.tts);
-
-        if (!this.embeds.isEmpty()) {
-            List<JSONObject> embedObjects = new ArrayList<>();
-
-            for (EmbedObject embed : this.embeds) {
-                JSONObject jsonEmbed = new JSONObject();
-
-                jsonEmbed.put("title", embed.getTitle());
-                jsonEmbed.put("description", embed.getDescription());
-                jsonEmbed.put("url", embed.getUrl());
-
-                if (embed.getColor() != null) {
-                    Color color = embed.getColor();
-                    int rgb = color.getRed();
-                    rgb = (rgb << 8) + color.getGreen();
-                    rgb = (rgb << 8) + color.getBlue();
-
-                    jsonEmbed.put("color", rgb);
-                }
-
-                EmbedObject.Footer footer = embed.getFooter();
-                EmbedObject.Image image = embed.getImage();
-                EmbedObject.Thumbnail thumbnail = embed.getThumbnail();
-                EmbedObject.Author author = embed.getAuthor();
-                List<EmbedObject.Field> fields = embed.getFields();
-
-                if (footer != null) {
-                    JSONObject jsonFooter = new JSONObject();
-
-                    jsonFooter.put("text", footer.getText());
-                    jsonFooter.put("icon_url", footer.getIconUrl());
-                    jsonEmbed.put("footer", jsonFooter);
-                }
-
-                if (image != null) {
-                    JSONObject jsonImage = new JSONObject();
-
-                    jsonImage.put("url", image.getUrl());
-                    jsonEmbed.put("image", jsonImage);
-                }
-
-                if (thumbnail != null) {
-                    JSONObject jsonThumbnail = new JSONObject();
-
-                    jsonThumbnail.put("url", thumbnail.getUrl());
-                    jsonEmbed.put("thumbnail", jsonThumbnail);
-                }
-
-                if (author != null) {
-                    JSONObject jsonAuthor = new JSONObject();
-
-                    jsonAuthor.put("name", author.getName());
-                    jsonAuthor.put("url", author.getUrl());
-                    jsonAuthor.put("icon_url", author.getIconUrl());
-                    jsonEmbed.put("author", jsonAuthor);
-                }
-
-                List<JSONObject> jsonFields = new ArrayList<>();
-                for (EmbedObject.Field field : fields) {
-                    JSONObject jsonField = new JSONObject();
-
-                    jsonField.put("name", field.getName());
-                    jsonField.put("value", field.getValue());
-                    jsonField.put("inline", field.isInline());
-
-                    jsonFields.add(jsonField);
-                }
-
-                jsonEmbed.put("fields", jsonFields.toArray());
-                embedObjects.add(jsonEmbed);
-            }
-
-            json.put("embeds", embedObjects.toArray());
-        }
-        return json;
     }
 }

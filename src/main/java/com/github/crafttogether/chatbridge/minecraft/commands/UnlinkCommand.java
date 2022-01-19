@@ -1,6 +1,5 @@
 package com.github.crafttogether.chatbridge.minecraft.commands;
 
-import com.github.crafttogether.chatbridge.discord.LinkCommand;
 import com.github.crafttogether.chatbridge.utilities.Members;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
