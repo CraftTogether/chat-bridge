@@ -12,6 +12,10 @@ import java.io.IOException;
 public class ReconnectIrcCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!ChatBridge.isIrcEnabled()) {
+            sender.sendMessage(ChatColor.RED + "IRC disabled in config");
+            return true;
+        }
         if (args.length < 1) {
             sender.sendMessage(ChatColor.RED + "You have not specified whether to force reconnect or not (true/false)");
             return true;

@@ -4,6 +4,7 @@ discord:
   minecraftPrefix: "[Discord]:" # The prefix added to the messages sent to discord
   webhook: some_webhook # The webhook of the discord channel where the bridged messages will be sent
 irc:
+  enabled: false # Set whether the irc connection is enabled (disabling it will remove IRC functionality
   username: MinecraftBridge # The name of the bot on the IRC server
   hostname: irc_hostname # The hostname or ip of the irc server
   port: 6697 # Default TLS port: 6697, if encryption is not available default port is 6667 (ensure to change tls to false)

@@ -39,6 +39,7 @@ public class ChatBridge extends JavaPlugin {
     private static int reconnectAttempts;
     private static int reconnectDelay;
     private static int remainingAttempts;
+    private static boolean ircEnabled;
 
     // Variables to store the connection state of discord and irc to ensure they are both connected
     private static boolean ircConnected = false;
@@ -113,6 +114,10 @@ public class ChatBridge extends JavaPlugin {
         return reconnectDelay;
     }
 
+    public static boolean isIrcEnabled() {
+        return ircEnabled;
+    }
+
     @Override
     public void onEnable() {
         plugin = this;
@@ -123,7 +128,10 @@ public class ChatBridge extends JavaPlugin {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        createIrcConnection();
+        ircEnabled = getConfig().getConfigurationSection("irc").getBoolean("enabled");
+        if (ircEnabled) {
+            createIrcConnection();
+        }
         Kelp.addListeners(new MessageListener(), new LinkCommand());
         DiscordMessageSender.send("Server", ":white_check_mark: Chat bridge enabled", null, MessageSource.OTHER);
 
@@ -135,9 +143,11 @@ public class ChatBridge extends JavaPlugin {
     public void onDisable() {
         DiscordMessageSender.send("Server", ":octagonal_sign: Chat bridge disabled",  null, MessageSource.OTHER);
         try {
-            if (ircConnection.isAlive()) {
-                ircConnection.getClient().command.disconnect("Chat Bridge has been disabled");
-                ircConnection.join();
+            if (ircConnection != null) {
+                if (ircConnection.isAlive()) {
+                    ircConnection.getClient().command.disconnect("Chat Bridge has been disabled");
+                    ircConnection.join();
+                }
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
