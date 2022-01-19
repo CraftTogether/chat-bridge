@@ -134,8 +134,10 @@ public class ChatBridge extends JavaPlugin {
     public void onDisable() {
         DiscordMessageSender.send("Server", ":octagonal_sign: Chat bridge disabled",  null, MessageSource.OTHER);
         try {
-            ircConnection.getClient().command.disconnect("Chat Bridge has been disabled");
-            ircConnection.join();
+            if (ircConnection.isAlive()) {
+                ircConnection.getClient().command.disconnect("Chat Bridge has been disabled");
+                ircConnection.join();
+            }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
