@@ -14,3 +14,6 @@ commands:
   reconnectirc:
     description: reconnect to IRC daemon which is defined in the config
     usage: /<command> <force reconnect>
+  disconnectirc:
+    description: disconnect from the IRC daemon
+    usage: /<command>
