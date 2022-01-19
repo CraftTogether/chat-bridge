@@ -21,7 +21,8 @@ public class ReconnectIrcCommand implements CommandExecutor {
                 if (ChatBridge.getIrcThread().getClient().isConnected()) {
                     try {
                         ChatBridge.getIrcThread().getClient().command.disconnect("Restarting chat bridge plugin");
-                    } catch (IOException e) {
+                        ChatBridge.getIrcThread().join();
+                    } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 }

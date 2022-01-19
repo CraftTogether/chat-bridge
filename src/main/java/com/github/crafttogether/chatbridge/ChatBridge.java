@@ -44,8 +44,10 @@ public class ChatBridge extends JavaPlugin {
 
     public static void createIrcConnection() {
         if (ircConnection != null) {
-            logger.error("Attempted to create a new IRC connection, but IRC connection already exists");
-            return;
+            if (ircConnection.isAlive()) {
+                logger.error("Attempted to create IRC connection, however connection already exists");
+                return;
+            }
         }
         final ConfigurationSection section = ChatBridge.getPlugin().getConfig().getConfigurationSection("irc");
         assert section != null;
