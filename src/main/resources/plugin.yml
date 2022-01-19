@@ -11,3 +11,6 @@ commands:
   unlink:
     description: Unlink your minecraft - discord connection
     usage: /<command>
+  reconnectirc:
+    description: reconnect to IRC daemon which is defined in the config
+    usage: /<command> <force reconnect>
