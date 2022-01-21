@@ -13,7 +13,6 @@ public class IrcCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "Invalid usage");
             sender.sendMessage(ChatColor.DARK_PURPLE + "IRC Commands:\nreconnect - reconnect to the IRC server\ndisconnect - disconnect from the IRC server");
             return true;
         }
@@ -41,6 +40,7 @@ public class IrcCommand implements CommandExecutor {
                             } catch (IOException | InterruptedException e) {
                                 e.printStackTrace();
                             }
+                            ChatBridge.createIrcConnection();
                         }
                     }
 
