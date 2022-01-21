@@ -163,8 +163,8 @@ public class ChatBridge extends JavaPlugin {
         pluginManager.registerEvents(new MinecraftMessageListener(), this);
         pluginManager.registerEvents(new MinecraftJoinEvent(), this);
         pluginManager.registerEvents(new MinecraftQuitEvent(), this);
-        Bukkit.getPluginCommand("verify").setExecutor(new VerifyCommand());
-        Bukkit.getPluginCommand("unlink").setExecutor(new UnlinkCommand());
-        Bukkit.getPluginCommand("irc").setExecutor(new IrcCommand());
+        getCommand("verify").setExecutor(new VerifyCommand());
+        getCommand("unlink").setExecutor(new UnlinkCommand());
+        getCommand("irc").setExecutor(new IrcCommand());
     }
 }
