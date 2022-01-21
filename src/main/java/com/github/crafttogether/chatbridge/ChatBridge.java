@@ -7,8 +7,7 @@ import com.github.crafttogether.chatbridge.irc.*;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftJoinEvent;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageListener;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftQuitEvent;
-import com.github.crafttogether.chatbridge.minecraft.commands.DisconnectIrcCommand;
-import com.github.crafttogether.chatbridge.minecraft.commands.ReconnectIrcCommand;
+import com.github.crafttogether.chatbridge.minecraft.commands.IrcCommand;
 import com.github.crafttogether.chatbridge.minecraft.commands.UnlinkCommand;
 import com.github.crafttogether.chatbridge.minecraft.commands.VerifyCommand;
 import com.github.crafttogether.kelp.Kelp;
@@ -166,7 +165,6 @@ public class ChatBridge extends JavaPlugin {
         pluginManager.registerEvents(new MinecraftQuitEvent(), this);
         Bukkit.getPluginCommand("verify").setExecutor(new VerifyCommand());
         Bukkit.getPluginCommand("unlink").setExecutor(new UnlinkCommand());
-        Bukkit.getPluginCommand("reconnectirc").setExecutor(new ReconnectIrcCommand());
-        Bukkit.getPluginCommand("disconnectirc").setExecutor(new DisconnectIrcCommand());
+        Bukkit.getPluginCommand("irc").setExecutor(new IrcCommand());
     }
 }
