@@ -40,6 +40,7 @@ public class ChatBridge extends JavaPlugin {
     private static int reconnectDelay;
     private static int remainingAttempts;
     private static boolean ircEnabled;
+    private static String channel;
 
     // Variables to store the connection state of discord and irc to ensure they are both connected
     private static boolean ircConnected = false;
@@ -77,7 +78,7 @@ public class ChatBridge extends JavaPlugin {
 
         reconnectAttempts = section.getInt("reconnectAttempts");
         reconnectDelay = section.getInt("reconnectDelay");
-        IrcMessageSender.setChannel(ircChannel.get(0));
+        channel = ircChannel.get(0);
         ircConnection = new IrcConnection(ircClient);
         ircConnection.start();
     }
@@ -116,6 +117,10 @@ public class ChatBridge extends JavaPlugin {
 
     public static boolean isIrcEnabled() {
         return ircEnabled;
+    }
+
+    public static String getChannel() {
+        return channel;
     }
 
     @Override
