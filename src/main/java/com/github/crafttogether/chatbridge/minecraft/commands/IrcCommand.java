@@ -24,24 +24,27 @@ public class IrcCommand implements CommandExecutor {
                     sender.sendMessage(ChatColor.RED + "Invalid usage: /irc reconnect <true/false>");
                     break;
                 }
-                if (args[1].equalsIgnoreCase("false")) {
-                    if (!ChatBridge.isIrcConnected()) {
-                        ChatBridge.createIrcConnection();
-                    } else {
-                        sender.sendMessage(ChatColor.RED + "IRC client already connected");
-                    }
-                } else if (args[1].equals("true")) {
-                    if (ChatBridge.getIrcThread().getClient().isConnected()) {
-                        try {
-                            ChatBridge.getIrcThread().getClient().command.disconnect("Restarting chat bridge");
-                            ChatBridge.getIrcThread().join();
-                        } catch (IOException | InterruptedException e) {
-                            e.printStackTrace();
+                switch (args[1]) {
+                    case "false" -> {
+                        if (!ChatBridge.isIrcConnected()) {
+                            ChatBridge.createIrcConnection();
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "IRC client already connected");
                         }
                     }
-                    ChatBridge.createIrcConnection();
-                } else {
-                    sender.sendMessage(String.format("%sInvalid usage: true/false not '%s'", ChatColor.RED, args[2]));
+
+                    case "true" -> {
+                        if (ChatBridge.getIrcThread().getClient().isConnected()) {
+                            try {
+                                ChatBridge.getIrcThread().getClient().command.disconnect("Restarting chat bridge");
+                                ChatBridge.getIrcThread().join();
+                            } catch (IOException | InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    default -> sender.sendMessage(String.format("%sInvalid usage: true/false not '%s'", ChatColor.RED, args[2]));
                 }
             }
             case "disconnect" -> {
@@ -55,7 +58,7 @@ public class IrcCommand implements CommandExecutor {
                     e.printStackTrace();
                 }
             }
-            default -> sender.sendMessage(String.format("%sThere is no IRC called %s", ChatColor.RED, args[1]));
+            default -> sender.sendMessage(String.format("%sThere is no IRC command called %s", ChatColor.RED, args[1]));
         }
         return true;
     }
