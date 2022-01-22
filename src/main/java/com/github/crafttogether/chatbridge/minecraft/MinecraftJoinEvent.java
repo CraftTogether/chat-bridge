@@ -52,15 +52,19 @@ public class MinecraftJoinEvent implements Listener {
 
                 final Guild guild = Kelp.getClient().getGuildById(guildId);
                 guild.retrieveMemberById(discordId).queue(member -> {
-                    final Color colour = member.getColor();
-                    final int r = colour.getRed();
-                    final int g = colour.getGreen();
-                    final int b = colour.getBlue();
-
                     final TextComponent text = PlainTextComponentSerializer
                             .plainText()
-                            .deserialize(player.getName())
-                            .color(TextColor.color(r, g, b));
+                            .deserialize(player.getName());
+
+                    final Color colour = member.getColor();
+                    if (colour != null) {
+                        final int r = colour.getRed();
+                        final int g = colour.getGreen();
+                        final int b = colour.getBlue();
+
+                        text.color(TextColor.color(r, g, b));
+                    }
+
                     player.playerListName(text);
                 });
             }
