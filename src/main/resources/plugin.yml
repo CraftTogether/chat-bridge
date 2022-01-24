@@ -5,12 +5,6 @@ api-version: 1.18
 depend:
   - Kelp
 commands:
-  verify:
-    description: Confirm your verfification
-    usage: /<command> <code>
-  unlink:
-    description: Unlink your minecraft - discord connection
-    usage: /<command>
   irc:
     description: commands related to the IRC connection
     usage: /<command> <subcommand>
