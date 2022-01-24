@@ -2,8 +2,9 @@ package com.github.crafttogether.chatbridge.minecraft;
 
 import com.github.crafttogether.chatbridge.ChatBridge;
 import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
-import com.github.crafttogether.chatbridge.utilities.Members;
 import com.github.crafttogether.kelp.Kelp;
+import com.github.crafttogether.rinku.Connection;
+import com.github.crafttogether.rinku.Rinku;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.kyori.adventure.text.TextComponent;
@@ -13,8 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.awt.*;
 import java.io.IOException;
@@ -39,35 +38,28 @@ public class MinecraftJoinEvent implements Listener {
     }
 
     private void assignColor(Player player) {
-        final JSONArray members = Members.get();
-        for (int i = 0; i < members.length(); i++) {
-            final JSONObject data = members.getJSONObject(i);
+        final Connection connection = Rinku.find(c -> c.getMinecraft().equals(player.getUniqueId().toString()));
+        if (connection != null) {
+            final String guildId = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getString("guildId");
+            if (guildId == null) return;
 
-            final String discordId = data.getString("discord");
-            final String minecraftUuid = data.getString("minecraft");
+            final Guild guild = Kelp.getClient().getGuildById(guildId);
+            guild.retrieveMemberById(connection.getDiscord()).queue(member -> {
+                final TextComponent text = PlainTextComponentSerializer
+                        .plainText()
+                        .deserialize(player.getName());
 
-            if (minecraftUuid.equals(player.getUniqueId().toString())) {
-                final String guildId = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getString("guildId");
-                if (guildId == null) return;
+                final Color colour = member.getColor();
+                if (colour != null) {
+                    final int r = colour.getRed();
+                    final int g = colour.getGreen();
+                    final int b = colour.getBlue();
 
-                final Guild guild = Kelp.getClient().getGuildById(guildId);
-                guild.retrieveMemberById(discordId).queue(member -> {
-                    final TextComponent text = PlainTextComponentSerializer
-                            .plainText()
-                            .deserialize(player.getName());
+                    text.color(TextColor.color(r, g, b));
+                }
 
-                    final Color colour = member.getColor();
-                    if (colour != null) {
-                        final int r = colour.getRed();
-                        final int g = colour.getGreen();
-                        final int b = colour.getBlue();
-
-                        text.color(TextColor.color(r, g, b));
-                    }
-
-                    player.playerListName(text);
-                });
-            }
+                player.playerListName(text);
+            });
         }
     }
 

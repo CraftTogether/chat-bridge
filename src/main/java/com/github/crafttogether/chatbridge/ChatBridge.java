@@ -1,15 +1,12 @@
 package com.github.crafttogether.chatbridge;
 
 import com.github.crafttogether.chatbridge.discord.DiscordMessageSender;
-import com.github.crafttogether.chatbridge.discord.LinkCommand;
 import com.github.crafttogether.chatbridge.discord.MessageListener;
 import com.github.crafttogether.chatbridge.irc.*;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftJoinEvent;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageListener;
 import com.github.crafttogether.chatbridge.minecraft.MinecraftQuitEvent;
 import com.github.crafttogether.chatbridge.minecraft.commands.IrcCommand;
-import com.github.crafttogether.chatbridge.minecraft.commands.UnlinkCommand;
-import com.github.crafttogether.chatbridge.minecraft.commands.VerifyCommand;
 import com.github.crafttogether.kelp.Kelp;
 import dev.polarian.ircj.IrcClient;
 import dev.polarian.ircj.UserMode;
@@ -136,7 +133,7 @@ public class ChatBridge extends JavaPlugin {
         if (ircEnabled) {
             createIrcConnection();
         }
-        Kelp.addListeners(new MessageListener(), new LinkCommand());
+        Kelp.addListeners(new MessageListener());
         DiscordMessageSender.send("Server", ":white_check_mark: Chat bridge enabled", null, MessageSource.OTHER);
 
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
@@ -163,8 +160,6 @@ public class ChatBridge extends JavaPlugin {
         pluginManager.registerEvents(new MinecraftMessageListener(), this);
         pluginManager.registerEvents(new MinecraftJoinEvent(), this);
         pluginManager.registerEvents(new MinecraftQuitEvent(), this);
-        getCommand("verify").setExecutor(new VerifyCommand());
-        getCommand("unlink").setExecutor(new UnlinkCommand());
         getCommand("irc").setExecutor(new IrcCommand());
     }
 }
