@@ -4,6 +4,7 @@ main: com.github.crafttogether.chatbridge.ChatBridge
 api-version: 1.18
 depend:
   - Kelp
+  - Rinku
 commands:
   irc:
     description: commands related to the IRC connection
