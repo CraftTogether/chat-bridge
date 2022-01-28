@@ -19,6 +19,10 @@ public class IrcCommand implements CommandExecutor {
 
         switch (args[0]) {
             case "reconnect" -> {
+                if (!sender.hasPermission("chatbridge.irc.reconnect")) {
+                    sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command");
+                    return true;
+                }
                 if (args.length < 2) {
                     sender.sendMessage(ChatColor.RED + "Invalid usage: /irc reconnect <true/false>");
                     break;
@@ -48,6 +52,10 @@ public class IrcCommand implements CommandExecutor {
                 }
             }
             case "disconnect" -> {
+                if (!sender.hasPermission("chatbridge.irc.disconnect")) {
+                    sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command");
+                    return true;
+                }
                 if (!ChatBridge.isIrcEnabled()) {
                     sender.sendMessage(ChatColor.RED + "IRC disabled in config");
                     return true;
