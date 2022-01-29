@@ -39,7 +39,7 @@ public class IrcCommand implements CommandExecutor {
                     case "true" -> {
                         if (ChatBridge.getIrcThread().getClient().isConnected()) {
                             try {
-                                ChatBridge.getIrcThread().getClient().command.disconnect("Restarting chat bridge");
+                                ChatBridge.getIrcThread().getClient().getCommands().disconnect("Restarting chat bridge");
                                 ChatBridge.getIrcThread().join();
                             } catch (IOException | InterruptedException e) {
                                 e.printStackTrace();
@@ -61,7 +61,7 @@ public class IrcCommand implements CommandExecutor {
                     return true;
                 }
                 try {
-                    ChatBridge.getIrcThread().getClient().command.disconnect("Disconnected by " + sender.getName());
+                    ChatBridge.getIrcThread().getClient().getCommands().disconnect("Disconnected by " + sender.getName());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

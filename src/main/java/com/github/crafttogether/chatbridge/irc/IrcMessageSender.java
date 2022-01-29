@@ -8,6 +8,6 @@ public class IrcMessageSender {
 
     public static void send(String message) throws IOException {
         if (!ChatBridge.isIrcConnected()) return;
-        ChatBridge.getIrcThread().getClient().command.sendMessage(ChatBridge.getChannel(), message);
+        ChatBridge.getIrcThread().getClient().getCommands().sendMessage(ChatBridge.getChannel(), message);
     }
 }

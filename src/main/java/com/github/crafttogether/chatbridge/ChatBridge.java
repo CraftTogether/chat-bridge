@@ -146,7 +146,7 @@ public class ChatBridge extends JavaPlugin {
         try {
             if (ircConnection != null) {
                 if (ircConnection.isAlive()) {
-                    ircConnection.getClient().command.disconnect("Chat Bridge has been disabled");
+                    ircConnection.getClient().getCommands().disconnect("Chat Bridge has been disabled");
                     ircConnection.join();
                 }
             }
