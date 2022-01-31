@@ -4,6 +4,7 @@ import com.github.crafttogether.kelp.Kelp;
 import dev.polarian.ircj.IrcClient;
 import dev.polarian.ircj.UserMode;
 import dev.polarian.ircj.objects.Config;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,8 +12,10 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.crafttogether.chatbridge.discord.Command;
 import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
-import xyz.crafttogether.chatbridge.discord.MessageListener;
+import xyz.crafttogether.chatbridge.discord.DiscordListener;
+import xyz.crafttogether.chatbridge.discord.commands.OnlineCommand;
 import xyz.crafttogether.chatbridge.irc.IrcConnection;
 import xyz.crafttogether.chatbridge.irc.OnDisconnect;
 import xyz.crafttogether.chatbridge.irc.OnPrivMessage;
@@ -25,15 +28,19 @@ import xyz.crafttogether.chatbridge.minecraft.listeners.WegListener;
 import xyz.crafttogether.weg.EventListener;
 import xyz.crafttogether.weg.Weg;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ChatBridge extends JavaPlugin {
 
     private static final Logger logger = LoggerFactory.getLogger(ChatBridge.class);
+
+    private static final HashMap<String, Command> discordCommands = new HashMap<>();
 
     private static JavaPlugin plugin;
     private static IrcConnection ircConnection;
@@ -127,6 +134,16 @@ public class ChatBridge extends JavaPlugin {
         return channel;
     }
 
+    public static void addDiscordCommand(Command command) {
+        Kelp.getClient().upsertCommand(command.getName(), command.getDescription()).queue();
+        discordCommands.put(command.getName(), command);
+    }
+
+    @Nullable
+    public static Command getDiscordCommand(String commandName) {
+        return discordCommands.getOrDefault(commandName, null);
+    }
+
     @Override
     public void onEnable() {
         plugin = this;
@@ -141,7 +158,8 @@ public class ChatBridge extends JavaPlugin {
         if (ircEnabled) {
             createIrcConnection();
         }
-        Kelp.addListeners(new MessageListener());
+        Kelp.addListeners(new DiscordListener());
+        addDiscordCommand(new OnlineCommand());
         DiscordMessageSender.send("Server", ":white_check_mark: Chat bridge enabled", null, MessageSource.OTHER);
 
         wegListener = new WegListener();
