@@ -1,4 +1,4 @@
-package com.github.crafttogether.chatbridge.utilities;
+package xyz.crafttogether.chatbridge.utilities;
 
 import okhttp3.*;
 import org.bukkit.Bukkit;

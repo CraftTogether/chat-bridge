@@ -1,6 +1,6 @@
-package com.github.crafttogether.chatbridge.minecraft.commands;
+package xyz.crafttogether.chatbridge.minecraft.commands;
 
-import com.github.crafttogether.chatbridge.ChatBridge;
+import xyz.crafttogether.chatbridge.ChatBridge;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

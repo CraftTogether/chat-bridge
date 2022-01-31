@@ -29,6 +29,7 @@ dependencies {
     compileOnly "com.github.CraftTogether:Kelp:1.2-SNAPSHOT-1"
     compileOnly "net.dv8tion:JDA:5.0.0-alpha.4"
     compileOnly "com.github.CraftTogether:Rinku:1.0-SNAPSHOT-5"
+    compileOnly "com.github.CraftTogether:weg:1.0-SNAPSHOT-2"
 }
 
 def targetJavaVersion = 17

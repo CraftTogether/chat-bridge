@@ -1,6 +1,6 @@
-package com.github.crafttogether.chatbridge.irc;
+package xyz.crafttogether.chatbridge.irc;
 
-import com.github.crafttogether.chatbridge.ChatBridge;
+import xyz.crafttogether.chatbridge.ChatBridge;
 
 import java.io.IOException;
 

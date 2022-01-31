@@ -1,8 +1,8 @@
-package com.github.crafttogether.chatbridge.discord;
+package xyz.crafttogether.chatbridge.discord;
 
-import com.github.crafttogether.chatbridge.ChatBridge;
-import com.github.crafttogether.chatbridge.MessageSource;
-import com.github.crafttogether.chatbridge.utilities.Webhook;
+import xyz.crafttogether.chatbridge.ChatBridge;
+import xyz.crafttogether.chatbridge.MessageSource;
+import xyz.crafttogether.chatbridge.utilities.Webhook;
 import com.github.crafttogether.kelp.Kelp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

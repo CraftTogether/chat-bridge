@@ -1,4 +1,4 @@
-package com.github.crafttogether.chatbridge;
+package xyz.crafttogether.chatbridge;
 
 public enum MessageSource {
     MINECRAFT(ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getString("minecraftPrefix")),

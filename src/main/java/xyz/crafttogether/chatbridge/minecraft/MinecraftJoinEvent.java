@@ -1,7 +1,7 @@
-package com.github.crafttogether.chatbridge.minecraft;
+package xyz.crafttogether.chatbridge.minecraft;
 
-import com.github.crafttogether.chatbridge.ChatBridge;
-import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
+import xyz.crafttogether.chatbridge.ChatBridge;
+import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 import com.github.crafttogether.kelp.Kelp;
 import com.github.crafttogether.rinku.Connection;
 import com.github.crafttogether.rinku.Rinku;

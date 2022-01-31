@@ -1,9 +1,9 @@
-package com.github.crafttogether.chatbridge.discord;
+package xyz.crafttogether.chatbridge.discord;
 
-import com.github.crafttogether.chatbridge.ChatBridge;
-import com.github.crafttogether.chatbridge.MessageSource;
-import com.github.crafttogether.chatbridge.irc.IrcMessageSender;
-import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageSender;
+import xyz.crafttogether.chatbridge.ChatBridge;
+import xyz.crafttogether.chatbridge.MessageSource;
+import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
+import xyz.crafttogether.chatbridge.minecraft.MinecraftMessageSender;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 

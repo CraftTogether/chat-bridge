@@ -1,6 +1,6 @@
-package com.github.crafttogether.chatbridge.minecraft;
+package xyz.crafttogether.chatbridge.minecraft;
 
-import com.github.crafttogether.chatbridge.MessageSource;
+import xyz.crafttogether.chatbridge.MessageSource;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;

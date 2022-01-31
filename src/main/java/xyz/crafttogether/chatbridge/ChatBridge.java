@@ -1,12 +1,14 @@
-package com.github.crafttogether.chatbridge;
+package xyz.crafttogether.chatbridge;
 
-import com.github.crafttogether.chatbridge.discord.DiscordMessageSender;
-import com.github.crafttogether.chatbridge.discord.MessageListener;
-import com.github.crafttogether.chatbridge.irc.*;
-import com.github.crafttogether.chatbridge.minecraft.MinecraftJoinEvent;
-import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageListener;
-import com.github.crafttogether.chatbridge.minecraft.MinecraftQuitEvent;
-import com.github.crafttogether.chatbridge.minecraft.commands.IrcCommand;
+import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
+import xyz.crafttogether.chatbridge.discord.MessageListener;
+import xyz.crafttogether.chatbridge.irc.IrcConnection;
+import xyz.crafttogether.chatbridge.irc.OnPrivMessage;
+import xyz.crafttogether.chatbridge.irc.OnWelcomeMessage;
+import xyz.crafttogether.chatbridge.minecraft.MinecraftJoinEvent;
+import xyz.crafttogether.chatbridge.minecraft.MinecraftMessageListener;
+import xyz.crafttogether.chatbridge.minecraft.MinecraftQuitEvent;
+import xyz.crafttogether.chatbridge.minecraft.commands.IrcCommand;
 import com.github.crafttogether.kelp.Kelp;
 import dev.polarian.ircj.IrcClient;
 import dev.polarian.ircj.UserMode;
@@ -18,6 +20,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.crafttogether.chatbridge.irc.OnDisconnect;
 
 import java.io.IOException;
 import java.nio.file.Files;

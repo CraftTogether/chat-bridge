@@ -1,8 +1,8 @@
-package com.github.crafttogether.chatbridge.irc;
+package xyz.crafttogether.chatbridge.irc;
 
-import com.github.crafttogether.chatbridge.MessageSource;
-import com.github.crafttogether.chatbridge.discord.DiscordMessageSender;
-import com.github.crafttogether.chatbridge.minecraft.MinecraftMessageSender;
+import xyz.crafttogether.chatbridge.MessageSource;
+import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
+import xyz.crafttogether.chatbridge.minecraft.MinecraftMessageSender;
 import dev.polarian.ircj.events.PrivMessageEvent;
 import dev.polarian.ircj.objects.messages.PrivMessage;
 

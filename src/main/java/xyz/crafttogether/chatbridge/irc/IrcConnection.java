@@ -1,4 +1,4 @@
-package com.github.crafttogether.chatbridge.irc;
+package xyz.crafttogether.chatbridge.irc;
 
 import dev.polarian.ircj.IrcClient;
 import org.slf4j.Logger;
