@@ -20,7 +20,7 @@ public class AfkListener implements AfkEvent {
     @Override
     public void invoke(Player player) {
          MessageEmbed embed = new EmbedBuilder()
-                .setTitle(player.getName() + " has went afk")
+                .setTitle(player.getName() + " has went AFK")
                 .setColor(Color.GRAY)
                 .build();
          long channelId = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getLong("discordChannelId");
