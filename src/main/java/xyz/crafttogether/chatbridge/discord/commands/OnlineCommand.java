@@ -8,8 +8,6 @@ import org.bukkit.entity.Player;
 import xyz.crafttogether.chatbridge.discord.Command;
 import xyz.crafttogether.weg.Weg;
 
-import java.awt.*;
-
 public class OnlineCommand implements Command {
     private static final String name = "online";
     private static final String description = "View the online players";
