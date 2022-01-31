@@ -5,6 +5,7 @@ api-version: 1.18
 depend:
   - Kelp
   - Rinku
+  - Weg
 commands:
   irc:
     description: commands related to the IRC connection
