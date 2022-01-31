@@ -1,10 +1,10 @@
-package xyz.crafttogether.chatbridge.minecraft;
+package xyz.crafttogether.chatbridge.minecraft.listeners;
 
-import xyz.crafttogether.chatbridge.MessageSource;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import xyz.crafttogether.chatbridge.MessageSource;
 
 public class MinecraftMessageSender {
 

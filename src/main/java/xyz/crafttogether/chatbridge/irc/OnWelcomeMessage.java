@@ -1,8 +1,8 @@
 package xyz.crafttogether.chatbridge.irc;
 
-import xyz.crafttogether.chatbridge.ChatBridge;
 import dev.polarian.ircj.events.WelcomeEvent;
 import dev.polarian.ircj.objects.messages.WelcomeMessage;
+import xyz.crafttogether.chatbridge.ChatBridge;
 
 public class OnWelcomeMessage implements WelcomeEvent {
     @Override

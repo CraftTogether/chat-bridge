@@ -1,12 +1,12 @@
-package xyz.crafttogether.chatbridge.minecraft;
+package xyz.crafttogether.chatbridge.minecraft.listeners;
 
-import xyz.crafttogether.chatbridge.ChatBridge;
-import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 import com.github.crafttogether.kelp.Kelp;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import xyz.crafttogether.chatbridge.ChatBridge;
+import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 
 import java.awt.*;
 import java.io.IOException;

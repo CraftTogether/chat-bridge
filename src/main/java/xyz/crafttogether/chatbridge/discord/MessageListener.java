@@ -1,11 +1,11 @@
 package xyz.crafttogether.chatbridge.discord;
 
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import xyz.crafttogether.chatbridge.ChatBridge;
 import xyz.crafttogether.chatbridge.MessageSource;
 import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
-import xyz.crafttogether.chatbridge.minecraft.MinecraftMessageSender;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftMessageSender;
 
 import java.io.IOException;
 

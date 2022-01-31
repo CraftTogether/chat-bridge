@@ -1,7 +1,5 @@
-package xyz.crafttogether.chatbridge.minecraft;
+package xyz.crafttogether.chatbridge.minecraft.listeners;
 
-import xyz.crafttogether.chatbridge.ChatBridge;
-import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 import com.github.crafttogether.kelp.Kelp;
 import com.github.crafttogether.rinku.Connection;
 import com.github.crafttogether.rinku.Rinku;
@@ -14,6 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import xyz.crafttogether.chatbridge.ChatBridge;
+import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 
 import java.awt.*;
 import java.io.IOException;

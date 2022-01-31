@@ -1,12 +1,12 @@
-package xyz.crafttogether.chatbridge.minecraft;
+package xyz.crafttogether.chatbridge.minecraft.listeners;
 
-import xyz.crafttogether.chatbridge.MessageSource;
-import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
-import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import xyz.crafttogether.chatbridge.MessageSource;
+import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
+import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 
 import java.io.IOException;
 

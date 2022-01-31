@@ -1,10 +1,10 @@
 package xyz.crafttogether.chatbridge.irc;
 
-import xyz.crafttogether.chatbridge.ChatBridge;
 import dev.polarian.ircj.DisconnectReason;
 import dev.polarian.ircj.events.DisconnectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.crafttogether.chatbridge.ChatBridge;
 
 public class OnDisconnect implements DisconnectEvent {
     private static final Logger logger = LoggerFactory.getLogger(OnDisconnect.class);

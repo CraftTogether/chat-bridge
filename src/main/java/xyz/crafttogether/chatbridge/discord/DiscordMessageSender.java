@@ -1,11 +1,11 @@
 package xyz.crafttogether.chatbridge.discord;
 
-import xyz.crafttogether.chatbridge.ChatBridge;
-import xyz.crafttogether.chatbridge.MessageSource;
-import xyz.crafttogether.chatbridge.utilities.Webhook;
 import com.github.crafttogether.kelp.Kelp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.crafttogether.chatbridge.ChatBridge;
+import xyz.crafttogether.chatbridge.MessageSource;
+import xyz.crafttogether.chatbridge.utilities.Webhook;
 
 import java.io.IOException;
 
