@@ -1,6 +1,5 @@
 package xyz.crafttogether.chatbridge;
 
-import com.github.crafttogether.kelp.Kelp;
 import dev.polarian.ircj.IrcClient;
 import dev.polarian.ircj.UserMode;
 import dev.polarian.ircj.objects.Config;
@@ -24,6 +23,7 @@ import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftJoinEvent;
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftMessageListener;
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftQuitEvent;
 import xyz.crafttogether.chatbridge.minecraft.listeners.WegListener;
+import xyz.crafttogether.kelp.Kelp;
 import xyz.crafttogether.weg.EventListener;
 import xyz.crafttogether.weg.Weg;
 

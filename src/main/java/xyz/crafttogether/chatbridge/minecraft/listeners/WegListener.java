@@ -1,6 +1,5 @@
 package xyz.crafttogether.chatbridge.minecraft.listeners;
 
-import com.github.crafttogether.kelp.Kelp;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -9,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.crafttogether.chatbridge.ChatBridge;
 import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
+import xyz.crafttogether.kelp.Kelp;
 import xyz.crafttogether.weg.EventListener;
 
 import java.awt.*;

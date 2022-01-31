@@ -1,8 +1,5 @@
 package xyz.crafttogether.chatbridge.minecraft.listeners;
 
-import com.github.crafttogether.kelp.Kelp;
-import com.github.crafttogether.rinku.Connection;
-import com.github.crafttogether.rinku.Rinku;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.kyori.adventure.text.TextComponent;
@@ -14,6 +11,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import xyz.crafttogether.chatbridge.ChatBridge;
 import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
+import xyz.crafttogether.kelp.Kelp;
+import xyz.crafttogether.rinku.Connection;
+import xyz.crafttogether.rinku.Rinku;
 
 import java.awt.*;
 import java.io.IOException;
