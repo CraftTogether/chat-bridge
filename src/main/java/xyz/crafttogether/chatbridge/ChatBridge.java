@@ -1,10 +1,12 @@
 package xyz.crafttogether.chatbridge;
 
+import com.github.crafttogether.weg.Weg;
 import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
 import xyz.crafttogether.chatbridge.discord.MessageListener;
 import xyz.crafttogether.chatbridge.irc.IrcConnection;
 import xyz.crafttogether.chatbridge.irc.OnPrivMessage;
 import xyz.crafttogether.chatbridge.irc.OnWelcomeMessage;
+import xyz.crafttogether.chatbridge.minecraft.AfkListener;
 import xyz.crafttogether.chatbridge.minecraft.MinecraftJoinEvent;
 import xyz.crafttogether.chatbridge.minecraft.MinecraftMessageListener;
 import xyz.crafttogether.chatbridge.minecraft.MinecraftQuitEvent;
@@ -40,6 +42,8 @@ public class ChatBridge extends JavaPlugin {
     private static int remainingAttempts;
     private static boolean ircEnabled;
     private static String channel;
+
+    private static AfkListener afkListener;
 
     // Variables to store the connection state of discord and irc to ensure they are both connected
     private static boolean ircConnected = false;
@@ -139,8 +143,10 @@ public class ChatBridge extends JavaPlugin {
         Kelp.addListeners(new MessageListener());
         DiscordMessageSender.send("Server", ":white_check_mark: Chat bridge enabled", null, MessageSource.OTHER);
 
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
         registerEvents();
+        afkListener = new AfkListener();
+        Weg.addAfkListener(afkListener);
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
     }
 
     @Override
