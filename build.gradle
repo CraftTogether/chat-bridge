@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'com.github.craftToegether'
-version = '1.2-SNAPSHOT-2'
+version = '1.2-SNAPSHOT-3'
 
 repositories {
     mavenCentral()
@@ -19,6 +19,10 @@ repositories {
     maven {
         url = "https://jitpack.io"
     }
+}
+
+shadowJar {
+    archiveFileName = "${baseName}-${version}";
 }
 
 dependencies {
