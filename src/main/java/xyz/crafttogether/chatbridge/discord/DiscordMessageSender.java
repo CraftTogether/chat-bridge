@@ -2,8 +2,8 @@ package xyz.crafttogether.chatbridge.discord;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xyz.crafttogether.chatbridge.ChatBridge;
 import xyz.crafttogether.chatbridge.MessageSource;
+import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.utilities.Webhook;
 import xyz.crafttogether.kelp.Kelp;
 
@@ -25,7 +25,7 @@ public class DiscordMessageSender {
         message = String.join(" ", args);
         if (message.length() == 0) return;
         try {
-            new Webhook(ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getString("webhook"))
+            new Webhook(ConfigHandler.getConfig().getDiscordConfigSection().getWebhook())
                     .setAvatarUrl(avatar)
                     .setUsername(username)
                     .setContent(source.icon + " " + message)

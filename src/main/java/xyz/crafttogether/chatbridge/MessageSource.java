@@ -1,9 +1,11 @@
 package xyz.crafttogether.chatbridge;
 
+import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
+
 public enum MessageSource {
-    MINECRAFT(ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getString("minecraftPrefix")),
+    MINECRAFT(ConfigHandler.getConfig().getDiscordConfigSection().getPrefix()),
     DISCORD(""),
-    IRC(ChatBridge.getPlugin().getConfig().getConfigurationSection("irc").getString("prefix")),
+    IRC(ConfigHandler.getConfig().getIrcConfigSection().getPrefix()),
     OTHER("");
 
     public final String icon;

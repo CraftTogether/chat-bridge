@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import xyz.crafttogether.chatbridge.ChatBridge;
 import xyz.crafttogether.chatbridge.MessageSource;
+import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftMessageSender;
 
@@ -26,8 +27,8 @@ public class DiscordListener extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getMessage().isWebhookMessage()) return;
         if (event.getMessage().getAuthor().isBot()) return;
-        final String channelId = ChatBridge.getPlugin().getConfig().getConfigurationSection("discord").getString("discordChannelId");
-        if (!channelId.equals(event.getChannel().getId())) return;
+        final long channelId = ConfigHandler.getConfig().getDiscordConfigSection().getChannelId();
+        if (channelId != event.getChannel().getIdLong()) return;
 
         MinecraftMessageSender.send(event.getMember().getEffectiveName(), event.getMessage().getContentRaw(), MessageSource.DISCORD);
         try {

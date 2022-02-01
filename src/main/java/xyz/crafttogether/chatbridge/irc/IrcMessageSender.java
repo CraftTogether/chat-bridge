@@ -1,6 +1,7 @@
 package xyz.crafttogether.chatbridge.irc;
 
 import xyz.crafttogether.chatbridge.ChatBridge;
+import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 
 import java.io.IOException;
 
@@ -8,6 +9,6 @@ public class IrcMessageSender {
 
     public static void send(String message) throws IOException {
         if (!ChatBridge.isIrcConnected()) return;
-        ChatBridge.getIrcThread().getClient().getCommands().sendMessage(ChatBridge.getChannel(), message);
+        ChatBridge.getIrcThread().getClient().getCommands().sendMessage(ConfigHandler.getConfig().getIrcConfigSection().getChannel(), message);
     }
 }

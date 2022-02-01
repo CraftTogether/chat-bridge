@@ -16,22 +16,18 @@ public class OnlineCommand implements Command {
     public void invoke(SlashCommandEvent event) {
         StringBuilder players = new StringBuilder();
         StringBuilder afkPlayers = new StringBuilder();
-        int afk = 0;
-        int active = 0;
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Weg.isAfk(player.getUniqueId())) {
                 afkPlayers.append("- ").append(player.getName()).append("\n");
-                afk++;
                 continue;
             }
             players.append("- ").append(player.getName()).append("\n");
-            active++;
         }
         MessageEmbed embed = new EmbedBuilder()
                 .setTitle("Players:")
                 .addField("Online", players.toString(), false)
                 .addField("AFK", afkPlayers.toString(), false)
-                .setFooter(String.format("There are %d players connected, %d active and %d AFK", Bukkit.getOnlinePlayers().size(), active, afk))
+                .setFooter(String.format("There are %d players connected, %d active and %d AFK", Bukkit.getOnlinePlayers().size(), Bukkit.getOnlinePlayers().size(), Weg.getAfkPlayers()))
                 .build();
         event.replyEmbeds(embed).queue();
     }
