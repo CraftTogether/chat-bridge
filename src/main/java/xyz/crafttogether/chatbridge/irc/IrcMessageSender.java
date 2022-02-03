@@ -8,7 +8,7 @@ import java.io.IOException;
 public class IrcMessageSender {
 
     public static void send(String message) throws IOException {
-        if (!ChatBridge.isIrcConnected()) return;
+        if (!ChatBridge.getIrcThread().getClient().isConnected()) return;
         ChatBridge.getIrcThread().getClient().getCommands().sendMessage(ConfigHandler.getConfig().getIrcConfigSection().getChannel(), message);
     }
 }

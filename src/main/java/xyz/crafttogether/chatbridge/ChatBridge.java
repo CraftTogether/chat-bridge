@@ -17,9 +17,7 @@ import xyz.crafttogether.chatbridge.discord.DiscordListener;
 import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
 import xyz.crafttogether.chatbridge.discord.commands.OnlineCommand;
 import xyz.crafttogether.chatbridge.irc.IrcConnection;
-import xyz.crafttogether.chatbridge.irc.OnDisconnect;
-import xyz.crafttogether.chatbridge.irc.OnPrivMessage;
-import xyz.crafttogether.chatbridge.irc.OnWelcomeMessage;
+import xyz.crafttogether.chatbridge.irc.IrcEventSubscriber;
 import xyz.crafttogether.chatbridge.minecraft.commands.IrcCommand;
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftJoinEvent;
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftMessageListener;
@@ -48,9 +46,6 @@ public class ChatBridge extends JavaPlugin {
 
     private static EventListener wegListener;
 
-    // Variables to store the connection state of discord and irc to ensure they are both connected
-    private static boolean ircConnected = false;
-
     public static void createIrcConnection() {
         if (ircConnection != null) {
             if (ircConnection.isAlive()) {
@@ -75,9 +70,7 @@ public class ChatBridge extends JavaPlugin {
                 .setUserMode(UserMode.NONE);
 
         IrcClient ircClient = new IrcClient(config);
-        ircClient.addWelcomeEventListener(new OnWelcomeMessage());
-        ircClient.addPrivMessageEventListener(new OnPrivMessage());
-        ircClient.addDisconnectEventListener(new OnDisconnect());
+        ircClient.addListener(new IrcEventSubscriber());
 
         ircConnection = new IrcConnection(ircClient);
         ircConnection.start();
@@ -89,14 +82,6 @@ public class ChatBridge extends JavaPlugin {
 
     public static IrcConnection getIrcThread() {
         return ircConnection;
-    }
-
-    public static boolean isIrcConnected() {
-        return ircConnected;
-    }
-
-    public static void setIrcConnected(boolean connected) {
-        ircConnected = connected;
     }
 
     public static void resetAttempts() {
@@ -122,13 +107,24 @@ public class ChatBridge extends JavaPlugin {
     }
 
     public static void updateChannelStatistics(int onlinePlayers, int afkPlayers) {
-        try {
-            ircConnection.getClient().getCommands().setTopic(ConfigHandler.getConfig().getIrcConfigSection().getChannel(), String.format("There are %d players online, %d of which are AFK", onlinePlayers, afkPlayers));
-        } catch (IOException e) {
-            logger.error("Failed to update IRC topic");
-            e.printStackTrace();
+        String topic = String.format("There are %d players online, %d of which are AFK", onlinePlayers, afkPlayers);
+        System.out.println(topic);
+        if (ConfigHandler.getConfig().getIrcConfigSection().isEnabled()) {
+            try {
+                System.out.println("invoked");
+                ircConnection.getClient().getCommands().sendMessage(ConfigHandler.getConfig().getIrcConfigSection().getChannel(), "hello there");
+                ircConnection.getClient().getCommands().setTopic(ConfigHandler.getConfig().getIrcConfigSection().getChannel(), topic);
+            } catch (IOException e) {
+                logger.error("Failed to update IRC topic");
+                e.printStackTrace();
+            }
         }
-        TextChannel channel = Kelp.getClient().getTextChannelById(plugin.getConfig().getLong("discord.discordChannelId"));
+        TextChannel channel = Kelp.getClient().getTextChannelById(ConfigHandler.getConfig().getDiscordConfigSection().getChannelId());
+        if (channel == null) {
+            logger.error("Failed to get discord channel");
+            return;
+        }
+        channel.getManager().setTopic(topic).queue();
     }
 
     @Override
@@ -148,6 +144,14 @@ public class ChatBridge extends JavaPlugin {
         Weg.addListener(wegListener);
 
         registerEvents();
+        try {
+            if (ConfigHandler.getConfig().getIrcConfigSection().isEnabled()) {
+                ircConnection.getClient().awaitReady();
+            }
+            Kelp.getClient().awaitReady();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         updateChannelStatistics(Bukkit.getOnlinePlayers().size(), Weg.getAfkPlayers());
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
     }

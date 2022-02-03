@@ -30,7 +30,7 @@ public class IrcCommand implements CommandExecutor {
                 }
                 switch (args[1]) {
                     case "false" -> {
-                        if (!ChatBridge.isIrcConnected()) {
+                        if (!ChatBridge.getIrcThread().getClient().isConnected()) {
                             ChatBridge.createIrcConnection();
                         } else {
                             sender.sendMessage(ChatColor.RED + "IRC client already connected");
