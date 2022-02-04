@@ -15,9 +15,12 @@ import xyz.crafttogether.chatbridge.configuration.sections.IrcConfigSection;
 import xyz.crafttogether.chatbridge.discord.Command;
 import xyz.crafttogether.chatbridge.discord.DiscordListener;
 import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
-import xyz.crafttogether.chatbridge.discord.commands.OnlineCommand;
+import xyz.crafttogether.chatbridge.discord.commands.DiscordOnlineCommand;
+import xyz.crafttogether.chatbridge.irc.CommandHandler;
 import xyz.crafttogether.chatbridge.irc.IrcConnection;
 import xyz.crafttogether.chatbridge.irc.IrcEventSubscriber;
+import xyz.crafttogether.chatbridge.irc.commands.InvalidCommand;
+import xyz.crafttogether.chatbridge.irc.commands.IrcOnlineCommand;
 import xyz.crafttogether.chatbridge.minecraft.commands.IrcCommand;
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftJoinEvent;
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftMessageListener;
@@ -137,7 +140,7 @@ public class ChatBridge extends JavaPlugin {
             createIrcConnection();
         }
         Kelp.addListeners(new DiscordListener());
-        addDiscordCommand(new OnlineCommand());
+        addDiscordCommand(new DiscordOnlineCommand());
         DiscordMessageSender.send("Server", ":white_check_mark: Chat bridge enabled", null, MessageSource.OTHER);
 
         wegListener = new WegListener();
@@ -147,6 +150,8 @@ public class ChatBridge extends JavaPlugin {
         try {
             if (ConfigHandler.getConfig().getIrcConfigSection().isEnabled()) {
                 ircConnection.getClient().awaitReady();
+                CommandHandler.setInvalidCommandHandler(new InvalidCommand());
+                CommandHandler.addCommand("online", new IrcOnlineCommand());
             }
             Kelp.getClient().awaitReady();
         } catch (InterruptedException e) {

@@ -13,9 +13,11 @@ public class IrcConfigSection extends ConfigSection {
     private String prefix;
     private int reconnectAttempts;
     private int reconnectDelay;
+    private String commandPrefix;
 
     public IrcConfigSection(boolean enabled, String username, String hostname, int port, boolean tls, int timeout,
-                            String channel, String prefix, int reconnectAttempts, int reconnectDelay) {
+                            String channel, String prefix, int reconnectAttempts, int reconnectDelay,
+                            String commandPrefix) {
         this.enabled = enabled;
         this.username = username;
         this.hostname = hostname;
@@ -26,6 +28,7 @@ public class IrcConfigSection extends ConfigSection {
         this.prefix = prefix;
         this.reconnectAttempts = reconnectAttempts;
         this.reconnectDelay = reconnectDelay;
+        this.commandPrefix = commandPrefix;
     }
 
     public boolean isEnabled() {
@@ -66,5 +69,9 @@ public class IrcConfigSection extends ConfigSection {
 
     public int getReconnectDelay() {
         return reconnectDelay;
+    }
+
+    public String getCommandPrefix() {
+        return commandPrefix;
     }
 }

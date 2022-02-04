@@ -22,3 +22,4 @@ irc:
   prefix: "[IRC:]" # The prefix added to the messages sent to discord
   reconnectAttempts: 10 # The number of times the plugin will attempt to reconnect to IRC
   reconnectDelay: 10 # The delay (in seconds) between attempts to connect
+  commandPrefix: $ # prefix for IRC commands

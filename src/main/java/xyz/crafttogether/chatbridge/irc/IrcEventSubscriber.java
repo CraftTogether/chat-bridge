@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.crafttogether.chatbridge.ChatBridge;
 import xyz.crafttogether.chatbridge.MessageSource;
+import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftMessageSender;
 
@@ -33,6 +34,10 @@ public class IrcEventSubscriber extends EventListener {
 
     @Override
     public void onPrivMessageEvent(PrivMessage message) {
+        String prefix = ConfigHandler.getConfig().getIrcConfigSection().getCommandPrefix();
+        if (message.getMessage().startsWith(prefix)) {
+            CommandHandler.parseCommand(message, prefix);
+        }
         MinecraftMessageSender.send(message.getNick(), message.getMessage(), MessageSource.IRC);
         DiscordMessageSender.send(message.getNick(), message.getMessage(), null, MessageSource.IRC);
     }

@@ -13,7 +13,7 @@ public class Config {
 
     public Config(long guildId, long discordId, String discordPrefix, String webhook, boolean ircEnabled,
                   String ircUsername, String ircHostname, int port, boolean tls, int timeout, String ircChannel,
-                  String ircPrefix, int reconnectAttempts, int reconnectDelay) {
+                  String ircPrefix, int reconnectAttempts, int reconnectDelay, String commandPrefix) {
         discordConfigSection = new DiscordConfigSection(
                 guildId,
                 discordId,
@@ -32,7 +32,8 @@ public class Config {
                 ircChannel,
                 ircPrefix,
                 reconnectAttempts,
-                reconnectDelay
+                reconnectDelay,
+                commandPrefix
         );
         configSections.put(ConfigSections.IRC, discordConfigSection);
     }

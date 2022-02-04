@@ -31,7 +31,8 @@ public class ConfigHandler {
                 fileConfiguration.getString("irc.channel"),
                 fileConfiguration.getString("irc.prefix"),
                 fileConfiguration.getInt("irc.reconnectAttempts"),
-                fileConfiguration.getInt("irc.reconnectDelay")
+                fileConfiguration.getInt("irc.reconnectDelay"),
+                fileConfiguration.getString("irc.commandPrefix")
         );
     }
 
