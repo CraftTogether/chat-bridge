@@ -8,6 +8,9 @@ import org.bukkit.entity.Player;
 import xyz.crafttogether.chatbridge.discord.Command;
 import xyz.crafttogether.weg.Weg;
 
+/**
+ * Command to get the current online players on the minecraft server
+ */
 public class DiscordOnlineCommand implements Command {
     private static final String name = "online";
     private static final String description = "View the online players";

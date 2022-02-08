@@ -21,6 +21,9 @@ import xyz.crafttogether.weg.Weg;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * Event listener which handles when a player joins the minecraft server
+ */
 public class MinecraftJoinEvent implements Listener {
 
     @EventHandler

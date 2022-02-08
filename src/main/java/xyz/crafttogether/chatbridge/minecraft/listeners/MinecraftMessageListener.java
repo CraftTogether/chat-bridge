@@ -10,6 +10,9 @@ import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 
 import java.io.IOException;
 
+/**
+ * Event listener which handles the messages' people send on the minecraft server
+ */
 public class MinecraftMessageListener implements Listener {
 
     @EventHandler

@@ -2,8 +2,8 @@ package xyz.crafttogether.chatbridge.irc;
 
 import dev.polarian.ircj.DisconnectReason;
 import dev.polarian.ircj.EventListener;
-import dev.polarian.ircj.objects.messages.PrivMessage;
-import dev.polarian.ircj.objects.messages.WelcomeMessage;
+import dev.polarian.ircj.objects.events.PrivMessageEvent;
+import dev.polarian.ircj.objects.events.WelcomeEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.crafttogether.chatbridge.ChatBridge;
@@ -12,9 +12,21 @@ import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftMessageSender;
 
+/**
+ * Event listener which listens for IRC events provided by the IRCJ library
+ */
 public class IrcEventSubscriber extends EventListener {
+    /**
+     * SLF4J Logger object
+     */
     private static final Logger logger = LoggerFactory.getLogger(IrcEventSubscriber.class);
 
+    /**
+     * Invoked when the IRC client disconnects from the IRC server
+     *
+     * @param reason The reason for the disconnect
+     * @param e The exception thrown by the IRC client
+     */
     @Override
     public void onDisconnectEvent(DisconnectReason reason, Exception e) {
         logger.warn("Disconnected from IRC server for reason: " + reason.toString().toLowerCase());
@@ -32,18 +44,28 @@ public class IrcEventSubscriber extends EventListener {
         }
     }
 
+    /**
+     * Invoked when a message is received by the IRC client
+     *
+     * @param event The PrivMessageEvent object
+     */
     @Override
-    public void onPrivMessageEvent(PrivMessage message) {
+    public void onPrivMessageEvent(PrivMessageEvent event) {
         String prefix = ConfigHandler.getConfig().getIrcConfigSection().getCommandPrefix();
-        if (message.getMessage().startsWith(prefix)) {
-            CommandHandler.parseCommand(message, prefix);
+        if (event.getMessage().startsWith(prefix)) {
+            CommandHandler.parseCommand(event, prefix);
         }
-        MinecraftMessageSender.send(message.getNick(), message.getMessage(), MessageSource.IRC);
-        DiscordMessageSender.send(message.getNick(), message.getMessage(), null, MessageSource.IRC);
+        MinecraftMessageSender.send(event.getNick(), event.getMessage(), MessageSource.IRC);
+        DiscordMessageSender.send(event.getNick(), event.getMessage(), null, MessageSource.IRC);
     }
 
+    /**
+     * Invoked when the IRC client successfully connects to the IRC server
+     *
+     * @param event The WelcomeEvent object
+     */
     @Override
-    public void onWelcomeEvent(WelcomeMessage message) {
+    public void onWelcomeEvent(WelcomeEvent event) {
         ChatBridge.resetAttempts();
     }
 }

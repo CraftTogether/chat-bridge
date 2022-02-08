@@ -9,10 +9,24 @@ import xyz.crafttogether.kelp.Kelp;
 
 import java.io.IOException;
 
+/**
+ * Class which abstracts the forwarding of messages to discord based on the message source
+ */
 public class DiscordMessageSender {
 
+    /**
+     * SLF4J instance
+     */
     private static final Logger logger = LoggerFactory.getLogger(DiscordMessageSender.class);
 
+    /**
+     * Sends a message to discord using the webhook provided in the plugin configuration
+     *
+     * @param username The username of the user which sent the message
+     * @param message The message content
+     * @param avatar The avatar of the user (for example the minecraft avatar)
+     * @param source The message source
+     */
     public static void send(String username, String message, String avatar, MessageSource source) {
         if (!Kelp.isConnected()) return;
         // check if the message pings @everyone or @here

@@ -6,15 +6,30 @@ import xyz.crafttogether.chatbridge.ChatBridge;
 
 import java.io.File;
 
+/**
+ * Handles the static configuration, and provides methods to load, reload and get the plugin configuration
+ */
 public class ConfigHandler {
+    /**
+     * The Config instance
+     */
     private static Config config;
+    /**
+     * The config file, used for reloading the configuration
+     */
     private static File configFile;
 
+    /**
+     * Initialises the config, should only be called once
+     */
     public static void loadConfig() {
         configFile = new File(ChatBridge.getPlugin().getDataFolder() + "/config.yml");
         reloadConfig();
     }
 
+    /**
+     * Reloads the configuration from the config file
+     */
     public static void reloadConfig() {
         FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(configFile);
         config = new Config(
@@ -36,6 +51,11 @@ public class ConfigHandler {
         );
     }
 
+    /**
+     * Gets the Config object
+     *
+     * @return The Config object
+     */
     public static Config getConfig() {
         return config;
     }

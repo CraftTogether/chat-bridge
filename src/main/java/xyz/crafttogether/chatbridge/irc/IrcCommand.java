@@ -1,7 +1,10 @@
 package xyz.crafttogether.chatbridge.irc;
 
-import dev.polarian.ircj.objects.messages.PrivMessage;
+import dev.polarian.ircj.objects.events.PrivMessageEvent;
 
+/**
+ * Interface used by IrcCommands which can be invoked when the command is received
+ */
 public interface IrcCommand {
-    void invoke(PrivMessage message);
+    void invoke(PrivMessageEvent event);
 }

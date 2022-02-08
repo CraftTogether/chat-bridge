@@ -14,9 +14,21 @@ import xyz.crafttogether.weg.EventListener;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * Event listener which listens for events provided by the Weg API --> the craft together AFK plugin
+ */
 public class WegListener extends EventListener {
+    /**
+     * A SLF4J Logger object
+     */
     private static final Logger logger = LoggerFactory.getLogger(WegListener.class);
 
+    /**
+     * Event invoked when a player on the server goes AFK (depends on how Weg classifies when someone goes afk,
+     * it is configurable within the Weg configuration file).
+     *
+     * @param player The player which went AFK
+     */
     @Override
     public void onAfkEvent(Player player) {
         MessageEmbed embed = new EmbedBuilder()
@@ -36,6 +48,11 @@ public class WegListener extends EventListener {
         }
     }
 
+    /**
+     * Event invoked when an AFK player returns
+     *
+     * @param player The player which is no longer AFK
+     */
     @Override
     public void onReturnEvent(Player player) {
         MessageEmbed embed = new EmbedBuilder()

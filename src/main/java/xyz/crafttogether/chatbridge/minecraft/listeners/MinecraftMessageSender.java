@@ -6,6 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import xyz.crafttogether.chatbridge.MessageSource;
 
+/**
+ * Class containing a static method to abstract the forwarding of messages to minecraft based on the message source
+ */
 public class MinecraftMessageSender {
 
     public static void send(String author, String message, MessageSource source) {

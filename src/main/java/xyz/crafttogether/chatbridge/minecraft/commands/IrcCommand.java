@@ -10,6 +10,9 @@ import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 
 import java.io.IOException;
 
+/**
+ * A class containing the IRC commands
+ */
 public class IrcCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {

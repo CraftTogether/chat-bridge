@@ -1,7 +1,6 @@
 package xyz.crafttogether.chatbridge;
 
 import dev.polarian.ircj.IrcClient;
-import dev.polarian.ircj.UserMode;
 import dev.polarian.ircj.objects.Config;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.bukkit.Bukkit;
@@ -32,83 +31,134 @@ import xyz.crafttogether.weg.Weg;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
+/**
+ * Main class for the plugin, extends the spigot JavaPlugin class
+ */
 public class ChatBridge extends JavaPlugin {
 
+    /**
+     * SLF4J Logger instance
+     */
     private static final Logger logger = LoggerFactory.getLogger(ChatBridge.class);
 
+    /**
+     * A hashmap containing all the discord commands which are registered on loading the plugin
+     */
     private static final HashMap<String, Command> discordCommands = new HashMap<>();
 
+    /**
+     * A static instance of the JavaPlugin class (self)
+     */
     private static JavaPlugin plugin;
+    /**
+     * Irc Thread, handles the IRC connection
+     */
     private static IrcConnection ircConnection;
 
+    /**
+     * A variable storing the number of remaining attempts to connect to the IRC server before it is abandoned and
+     * has to be manually connected through the irc connection command
+     */
     private static int remainingAttempts;
 
+    /**
+     * The instance of the Weg event listener so that the event can be unsubscribed when the plugin is unloaded
+     */
     private static EventListener wegListener;
 
+    /**
+     * A static method used to creating the IRC connection. Will only connect if there is no existing connection or
+     * if the thread has exited.
+     */
     public static void createIrcConnection() {
+        // Check if already connected to the IRC server
         if (ircConnection != null) {
             if (ircConnection.isAlive()) {
                 logger.error("Attempted to create IRC connection, however connection already exists");
                 return;
             }
         }
-        final Config config = new Config();
+
+        // Get the IRC configuration from the ConfigHandler and create IRC Config
         IrcConfigSection section = ConfigHandler.getConfig().getIrcConfigSection();
+        final Config config = new Config(section.getHostname(), section.getPort(), section.getUsername(),
+                section.getChannel());
 
-        final List<String> ircChannel = new ArrayList<>() {{add("#" + section.getChannel());}};
-        final String nickname = section.getUsername();
-        config
-                .setUsername(nickname)
-                .setNickname(nickname)
-                .setChannels(ircChannel)
-                .setHostname(section.getHostname())
-                .setPort(section.getPort())
-                .setTimeout(section.getTimeout() * 1000) // multiply by 1000 to convert seconds to milliseconds
-                .setTls(section.isTlsEnabled())
-                .setRealName(nickname)
-                .setUserMode(UserMode.NONE);
-
+        // Create IRC client and add listeners
         IrcClient ircClient = new IrcClient(config);
         ircClient.addListener(new IrcEventSubscriber());
 
+        // create the IRC connection and start it
         ircConnection = new IrcConnection(ircClient);
         ircConnection.start();
     }
 
+    /**
+     * Gets the static instance of the plugin
+     * @return The JavaPlugin object
+     */
     public static JavaPlugin getPlugin() {
         return plugin;
     }
 
+    /**
+     * Gets the IRC connection (extends thread)
+     * @return IrcConnection which extends the Thread class
+     */
     public static IrcConnection getIrcThread() {
         return ircConnection;
     }
 
+    /**
+     * Reset reconnect attempts variable
+     */
     public static void resetAttempts() {
         remainingAttempts = ConfigHandler.getConfig().getIrcConfigSection().getReconnectAttempts();
     }
 
+    /**
+     * Gets the number of remaining attempts to connect to the IRC server
+     * @return The number of remaining attempts to connect to the IRC server
+     */
     public static int getRemainingAttempts() {
         return remainingAttempts;
     }
 
+    /**
+     * Decrements the remaining attempts by 1 when method is invoked
+     */
     public static void decrementRemainingAttempts() {
         remainingAttempts--;
     }
 
+    /**
+     * Method used to add a discord command, used to upset the command and also add it to the discord command hashmap
+     * @param command An object which implements the Command interface
+     * @see Command
+     */
     public static void addDiscordCommand(Command command) {
         Kelp.getClient().upsertCommand(command.getName(), command.getDescription()).queue();
         discordCommands.put(command.getName(), command);
     }
 
+    /**
+     * Gets the command (if exists) from the command hashmap, returns null if the command is not registered
+     * @param commandName The name of the command added to the hashmap
+     * @return The Command if it exists, otherwise null
+     */
     @Nullable
     public static Command getDiscordCommand(String commandName) {
         return discordCommands.getOrDefault(commandName, null);
     }
 
+    /**
+     * Updates the discord and IRC channel topic --> which contains info about the status of the plugin
+     *
+     * @param onlinePlayers The number of players currently online on the server
+     * @param afkPlayers The number of players currently AFK on the server
+     */
     public static void updateChannelStatistics(int onlinePlayers, int afkPlayers) {
         String topic = String.format("There are %d players online, %d of which are AFK", onlinePlayers, afkPlayers);
         System.out.println(topic);
@@ -130,6 +180,9 @@ public class ChatBridge extends JavaPlugin {
         channel.getManager().setTopic(topic).queue();
     }
 
+    /**
+     * Invoked when the plugin is enabled
+     */
     @Override
     public void onEnable() {
         plugin = this;
@@ -161,6 +214,9 @@ public class ChatBridge extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
     }
 
+    /**
+     * Invoked when the plugin is disabled
+     */
     @Override
     public void onDisable() {
         Weg.removeListener(wegListener);
@@ -177,6 +233,9 @@ public class ChatBridge extends JavaPlugin {
         }
     }
 
+    /**
+     * Registers the required minecraft events
+     */
     private void registerEvents() {
         final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
         pluginManager.registerEvents(new MinecraftMessageListener(), this);

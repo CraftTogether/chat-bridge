@@ -11,8 +11,15 @@ import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftMessageSender;
 
 import java.io.IOException;
 
+/**
+ * Handles discord event listening
+ */
 public class DiscordListener extends ListenerAdapter {
 
+    /**
+     * Invoked when A slash command is executed
+     * @param event The SlashCommandEvent object
+     */
     @Override
     public void onSlashCommand(SlashCommandEvent event) {
         Command command = ChatBridge.getDiscordCommand(event.getName());
@@ -23,6 +30,10 @@ public class DiscordListener extends ListenerAdapter {
         }
     }
 
+    /**
+     * Invoked when a message is received in a channel the bot can read messages in
+     * @param event The MessageReceivedEvent object
+     */
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getMessage().isWebhookMessage()) return;

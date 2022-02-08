@@ -2,6 +2,9 @@ package xyz.crafttogether.chatbridge.configuration.sections;
 
 import xyz.crafttogether.chatbridge.configuration.ConfigSection;
 
+/**
+ * Configuration section which stores the discord configuration
+ */
 public class DiscordConfigSection extends ConfigSection {
     private long guildId;
     private long channelId;

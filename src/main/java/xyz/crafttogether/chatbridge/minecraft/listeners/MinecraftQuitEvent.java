@@ -14,6 +14,9 @@ import xyz.crafttogether.weg.Weg;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * Event listener which handles when a player leaves the minecraft server
+ */
 public class MinecraftQuitEvent implements Listener {
 
     @EventHandler
