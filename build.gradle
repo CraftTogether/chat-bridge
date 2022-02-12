@@ -35,7 +35,7 @@ dependencies {
     implementation 'dev.polarian:ircj:1.1-SNAPSHOT-15'
     compileOnly "xyz.crafttogether:Kelp:1.2-SNAPSHOT-4"
     compileOnly 'net.dv8tion:JDA:5.0.0-alpha.5'
-    compileOnly "com.github.CraftTogether:Rinku:1.0-SNAPSHOT-8"
+    compileOnly "xyz.crafttogether:Rinku:1.0-SNAPSHOT-8"
     compileOnly "com.github.CraftTogether:weg:1.1-SNAPSHOT-1"
 }
 
