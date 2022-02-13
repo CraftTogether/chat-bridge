@@ -29,7 +29,7 @@ dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT'
     implementation group: 'com.squareup.okhttp', name: 'okhttp', version: '2.7.5' // OkHttp
     implementation group: 'org.json', name: 'json', version: '20211205' // JSON
-    implementation 'dev.polarian:ircj:1.1-SNAPSHOT-16'
+    implementation 'dev.polarian:ircj:1.1-SNAPSHOT-17'
     compileOnly "xyz.crafttogether:Kelp:1.2-SNAPSHOT-4"
     compileOnly 'net.dv8tion:JDA:5.0.0-alpha.5'
     compileOnly "xyz.crafttogether:Rinku:1.0-SNAPSHOT-8"
