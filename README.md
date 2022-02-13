@@ -4,6 +4,8 @@
 [![](https://img.shields.io/github/downloads/CraftTogether/chat-bridge/total.svg)](https://github.com/CraftTogether/chat-bridge/releases)
 ![](https://img.shields.io/github/issues/CraftTogether/chat-bridge.svg)
 ![](https://img.shields.io/github/issues-pr/CraftTogether/chat-bridge.svg)
+![](https://img.shields.io/github/repo-size/CraftTogether/chat-bridge)
+
 # Minecraft Chat Bridge
 A simple, efficient 3 way bridge between Discord, IRC (optional) and Minecraft, using 
 [JDA](https://github.com/DV8FromTheWorld/JDA) and [IRCJ](https://gitlab.com/PolarianDev/ircj) <BR>
