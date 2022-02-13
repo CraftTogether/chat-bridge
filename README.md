@@ -1,6 +1,8 @@
 [![](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/zSWjKVvfNy)
 [![](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/CraftTogether) <BR>
 ![](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
+[![](https://img.shields.io/github/v/release/CraftTogether/chat-bridge?color=brightgreen&label=Stable)](https://github.com/CraftTogether/chat-bridge/releases)
+[![](https://img.shields.io/github/v/tag/CraftTogether/chat-bridge?color=brightgreen&label=Beta)](https://github.com/CraftTogether/chat-bridge/tags) <BR>
 [![](https://img.shields.io/github/downloads/CraftTogether/chat-bridge/total.svg)](https://github.com/CraftTogether/chat-bridge/releases)
 ![](https://img.shields.io/github/issues/CraftTogether/chat-bridge.svg)
 ![](https://img.shields.io/github/issues-pr/CraftTogether/chat-bridge.svg)
