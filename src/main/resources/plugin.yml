@@ -4,7 +4,6 @@ main: xyz.crafttogether.chatbridge.ChatBridge
 api-version: 1.18
 depend:
   - CraftCore
-  - Rinku
   - Weg
 commands:
   irc:

@@ -14,12 +14,13 @@ import xyz.crafttogether.chatbridge.ChatBridge;
 import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 import xyz.crafttogether.craftcore.CraftCore;
-import xyz.crafttogether.rinku.Connection;
-import xyz.crafttogether.rinku.Rinku;
+import xyz.crafttogether.craftcore.connector.AccountConnection;
+import xyz.crafttogether.craftcore.connector.AccountConnector;
 import xyz.crafttogether.weg.Weg;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Event listener which handles when a player joins the minecraft server
@@ -44,28 +45,28 @@ public class MinecraftJoinEvent implements Listener {
     }
 
     private void assignColor(Player player) {
-        final Connection connection = Rinku.find(c -> c.getMinecraft().equals(player.getUniqueId().toString()));
-        if (connection != null) {
-            final long guildId = ConfigHandler.getConfig().getDiscordConfigSection().getGuildId();
+        Optional<AccountConnection> optional = AccountConnector.getAccount(player.getUniqueId());
+        if (optional.isEmpty()) return;
+        AccountConnection account = optional.get();
+        final long guildId = ConfigHandler.getConfig().getDiscordConfigSection().getGuildId();
 
-            final Guild guild = CraftCore.getJda().getGuildById(guildId);
-            guild.retrieveMemberById(connection.getDiscord()).queue(member -> {
-                final TextComponent text = PlainTextComponentSerializer
-                        .plainText()
-                        .deserialize(player.getName());
+        final Guild guild = CraftCore.getJda().getGuildById(guildId);
+        guild.retrieveMemberById(account.getDiscordId()).queue(member -> {
+            final TextComponent text = PlainTextComponentSerializer
+                    .plainText()
+                    .deserialize(player.getName());
 
-                final Color colour = member.getColor();
-                if (colour != null) {
-                    final int r = colour.getRed();
-                    final int g = colour.getGreen();
-                    final int b = colour.getBlue();
+            final Color colour = member.getColor();
+            if (colour != null) {
+                final int r = colour.getRed();
+                final int g = colour.getGreen();
+                final int b = colour.getBlue();
 
-                    text.color(TextColor.color(r, g, b));
-                }
+                text.color(TextColor.color(r, g, b));
+            }
 
-                player.playerListName(text);
-            });
-        }
+            player.playerListName(text);
+        });
     }
 
 }
