@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
-import xyz.crafttogether.kelp.Kelp;
+import xyz.crafttogether.craftcore.CraftCore;
 import xyz.crafttogether.weg.EventListener;
 
 import java.awt.*;
@@ -36,7 +36,7 @@ public class WegListener extends EventListener {
                 .setColor(Color.GRAY)
                 .build();
         long channelId = ConfigHandler.getConfig().getDiscordConfigSection().getChannelId();
-        TextChannel channel = Kelp.getClient().getTextChannelById(channelId);
+        TextChannel channel = CraftCore.getJda().getTextChannelById(channelId);
         if (channel == null) {
             logger.error("Failed to get discord channel");
         }
@@ -60,7 +60,7 @@ public class WegListener extends EventListener {
                 .setColor(Color.GRAY)
                 .build();
         long channelId = ConfigHandler.getConfig().getDiscordConfigSection().getChannelId();
-        TextChannel channel = Kelp.getClient().getTextChannelById(channelId);
+        TextChannel channel = CraftCore.getJda().getTextChannelById(channelId);
         if (channel == null) {
             logger.error("Failed to get discord channel");
         }

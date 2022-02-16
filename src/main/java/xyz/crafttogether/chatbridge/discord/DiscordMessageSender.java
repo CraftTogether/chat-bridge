@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import xyz.crafttogether.chatbridge.MessageSource;
 import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.utilities.Webhook;
-import xyz.crafttogether.kelp.Kelp;
 
 import java.io.IOException;
 
@@ -28,7 +27,6 @@ public class DiscordMessageSender {
      * @param source The message source
      */
     public static void send(String username, String message, String avatar, MessageSource source) {
-        if (!Kelp.isConnected()) return;
         // check if the message pings @everyone or @here
         String[] args = message.split("\s+");
         for (int i = 0; i < args.length; i++) {

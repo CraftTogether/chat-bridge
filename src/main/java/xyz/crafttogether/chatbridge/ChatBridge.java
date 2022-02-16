@@ -25,7 +25,7 @@ import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftJoinEvent;
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftMessageListener;
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftQuitEvent;
 import xyz.crafttogether.chatbridge.minecraft.listeners.WegListener;
-import xyz.crafttogether.kelp.Kelp;
+import xyz.crafttogether.craftcore.CraftCore;
 import xyz.crafttogether.weg.EventListener;
 import xyz.crafttogether.weg.Weg;
 
@@ -139,7 +139,7 @@ public class ChatBridge extends JavaPlugin {
      * @see Command
      */
     public static void addDiscordCommand(Command command) {
-        Kelp.getClient().upsertCommand(command.getName(), command.getDescription()).queue();
+        CraftCore.getJda().upsertCommand(command.getName(), command.getDescription()).queue();
         discordCommands.put(command.getName(), command);
     }
 
@@ -172,7 +172,7 @@ public class ChatBridge extends JavaPlugin {
                 e.printStackTrace();
             }
         }
-        TextChannel channel = Kelp.getClient().getTextChannelById(ConfigHandler.getConfig().getDiscordConfigSection().getChannelId());
+        TextChannel channel = CraftCore.getJda().getTextChannelById(ConfigHandler.getConfig().getDiscordConfigSection().getChannelId());
         if (channel == null) {
             logger.error("Failed to get discord channel");
             return;
@@ -192,7 +192,7 @@ public class ChatBridge extends JavaPlugin {
         if (ConfigHandler.getConfig().getIrcConfigSection().isEnabled()) {
             createIrcConnection();
         }
-        Kelp.addListeners(new DiscordListener());
+        CraftCore.addListeners(new DiscordListener());
         addDiscordCommand(new DiscordOnlineCommand());
         DiscordMessageSender.send("Server", ":white_check_mark: Chat bridge enabled", null, MessageSource.OTHER);
 
@@ -206,7 +206,7 @@ public class ChatBridge extends JavaPlugin {
                 CommandHandler.setInvalidCommandHandler(new InvalidCommand());
                 CommandHandler.addCommand("online", new IrcOnlineCommand());
             }
-            Kelp.getClient().awaitReady();
+            CraftCore.getJda().awaitReady();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

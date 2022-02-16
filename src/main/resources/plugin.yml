@@ -3,7 +3,7 @@ version: '${version}'
 main: xyz.crafttogether.chatbridge.ChatBridge
 api-version: 1.18
 depend:
-  - Kelp
+  - CraftCore
   - Rinku
   - Weg
 commands:

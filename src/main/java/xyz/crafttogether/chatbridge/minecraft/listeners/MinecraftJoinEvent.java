@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import xyz.crafttogether.chatbridge.ChatBridge;
 import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
-import xyz.crafttogether.kelp.Kelp;
+import xyz.crafttogether.craftcore.CraftCore;
 import xyz.crafttogether.rinku.Connection;
 import xyz.crafttogether.rinku.Rinku;
 import xyz.crafttogether.weg.Weg;
@@ -28,7 +28,6 @@ public class MinecraftJoinEvent implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (!Kelp.isConnected()) return;
         assignColor(event.getPlayer());
         ChatBridge.updateChannelStatistics(Bukkit.getOnlinePlayers().size(), Weg.getAfkPlayers());
 
@@ -36,7 +35,7 @@ public class MinecraftJoinEvent implements Listener {
                 .setColor(Color.GREEN)
                 .setTitle(String.format("%s has joined the server", event.getPlayer().getName()));
         final long channelId = ConfigHandler.getConfig().getDiscordConfigSection().getChannelId();
-        Kelp.getClient().getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
+        CraftCore.getJda().getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
         try {
             IrcMessageSender.send(String.format("\u00033%s has joined the server", event.getPlayer().getName()));
         } catch (IOException error) {
@@ -49,7 +48,7 @@ public class MinecraftJoinEvent implements Listener {
         if (connection != null) {
             final long guildId = ConfigHandler.getConfig().getDiscordConfigSection().getGuildId();
 
-            final Guild guild = Kelp.getClient().getGuildById(guildId);
+            final Guild guild = CraftCore.getJda().getGuildById(guildId);
             guild.retrieveMemberById(connection.getDiscord()).queue(member -> {
                 final TextComponent text = PlainTextComponentSerializer
                         .plainText()

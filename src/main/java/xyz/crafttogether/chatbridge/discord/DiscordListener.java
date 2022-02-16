@@ -1,6 +1,6 @@
 package xyz.crafttogether.chatbridge.discord;
 
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import xyz.crafttogether.chatbridge.ChatBridge;
@@ -21,7 +21,7 @@ public class DiscordListener extends ListenerAdapter {
      * @param event The SlashCommandEvent object
      */
     @Override
-    public void onSlashCommand(SlashCommandEvent event) {
+    public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         Command command = ChatBridge.getDiscordCommand(event.getName());
         if (command == null) {
             event.reply("Invalid command").queue();

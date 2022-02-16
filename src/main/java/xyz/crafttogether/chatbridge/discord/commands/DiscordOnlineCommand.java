@@ -2,7 +2,7 @@ package xyz.crafttogether.chatbridge.discord.commands;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import xyz.crafttogether.chatbridge.discord.Command;
@@ -16,7 +16,7 @@ public class DiscordOnlineCommand implements Command {
     private static final String description = "View the online players";
 
     @Override
-    public void invoke(SlashCommandEvent event) {
+    public void invoke(SlashCommandInteractionEvent event) {
         StringBuilder players = new StringBuilder();
         StringBuilder afkPlayers = new StringBuilder();
         for (Player player : Bukkit.getOnlinePlayers()) {
