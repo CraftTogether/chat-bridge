@@ -135,11 +135,8 @@ public class ChatBridge extends JavaPlugin {
      */
     public static void updateChannelStatistics(int onlinePlayers, int afkPlayers) {
         String topic = String.format("There are %d players online, %d of which are AFK", onlinePlayers, afkPlayers);
-        System.out.println(topic);
         if (ConfigHandler.getConfig().getIrcConfigSection().isEnabled()) {
             try {
-                System.out.println("invoked");
-                ircConnection.getClient().getCommands().sendMessage(ConfigHandler.getConfig().getIrcConfigSection().getChannel(), "hello there");
                 ircConnection.getClient().getCommands().setTopic(ConfigHandler.getConfig().getIrcConfigSection().getChannel(), topic);
             } catch (IOException e) {
                 logger.error("Failed to update IRC topic");
