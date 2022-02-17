@@ -78,7 +78,7 @@ public class ChatBridge extends JavaPlugin {
         // Get the IRC configuration from the ConfigHandler and create IRC Config
         IrcConfigSection section = ConfigHandler.getConfig().getIrcConfigSection();
         final Config config = new Config(section.getHostname(), section.getPort(), section.getUsername(),
-                section.getChannel(), section.isTlsEnabled());
+                "#" + section.getChannel(), section.isTlsEnabled());
 
         // Create IRC client and add listeners
         IrcClient ircClient = new IrcClient(config);
