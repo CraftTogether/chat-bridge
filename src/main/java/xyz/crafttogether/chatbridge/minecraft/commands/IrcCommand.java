@@ -4,16 +4,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import xyz.crafttogether.chatbridge.ChatBridge;
 import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A class containing the IRC commands
  */
-public class IrcCommand implements CommandExecutor {
+public class IrcCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
@@ -73,5 +77,24 @@ public class IrcCommand implements CommandExecutor {
             default -> sender.sendMessage(String.format("%sThere is no IRC command called %s", ChatColor.RED, args[1]));
         }
         return true;
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        List<String> completion = new ArrayList<>();
+        switch (args.length) {
+            case 1 -> {
+                completion.add("reconnect");
+                completion.add("disconnect");
+            }
+
+            case 2 -> {
+                if (args[0].equals("reconnect")) {
+                    completion.add("true");
+                    completion.add("false");
+                }
+            }
+        }
+        return completion;
     }
 }

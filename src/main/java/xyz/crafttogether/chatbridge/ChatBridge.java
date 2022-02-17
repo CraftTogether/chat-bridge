@@ -215,6 +215,8 @@ public class ChatBridge extends JavaPlugin {
         pluginManager.registerEvents(new MinecraftMessageListener(), this);
         pluginManager.registerEvents(new MinecraftJoinEvent(), this);
         pluginManager.registerEvents(new MinecraftQuitEvent(), this);
-        getCommand("irc").setExecutor(new IrcCommand());
+        IrcCommand ircCommand = new IrcCommand();
+        getCommand("irc").setExecutor(ircCommand);
+        getCommand("irc").setTabCompleter(ircCommand);
     }
 }
