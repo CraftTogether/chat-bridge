@@ -11,9 +11,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import xyz.crafttogether.chatbridge.ChatBridge;
-import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 import xyz.crafttogether.craftcore.CraftCore;
+import xyz.crafttogether.craftcore.configuration.ConfigHandler;
 import xyz.crafttogether.craftcore.connector.AccountConnection;
 import xyz.crafttogether.craftcore.connector.AccountConnector;
 import xyz.crafttogether.weg.Weg;
@@ -35,7 +35,7 @@ public class MinecraftJoinEvent implements Listener {
         EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Color.GREEN)
                 .setTitle(String.format("%s has joined the server", event.getPlayer().getName()));
-        final long channelId = ConfigHandler.getConfig().getDiscordConfigSection().getChannelId();
+        final long channelId = ConfigHandler.getConfig().getDiscordChannelId();
         CraftCore.getJda().getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
         try {
             IrcMessageSender.send(String.format("\u00033%s has joined the server", event.getPlayer().getName()));
@@ -48,7 +48,7 @@ public class MinecraftJoinEvent implements Listener {
         Optional<AccountConnection> optional = AccountConnector.getAccount(player.getUniqueId());
         if (optional.isEmpty()) return;
         AccountConnection account = optional.get();
-        final long guildId = ConfigHandler.getConfig().getDiscordConfigSection().getGuildId();
+        final long guildId = ConfigHandler.getConfig().getDiscordGuildId();
 
         final Guild guild = CraftCore.getJda().getGuildById(guildId);
         guild.retrieveMemberById(account.getDiscordId()).queue(member -> {

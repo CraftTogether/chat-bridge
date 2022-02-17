@@ -6,9 +6,9 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import org.bukkit.entity.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 import xyz.crafttogether.craftcore.CraftCore;
+import xyz.crafttogether.craftcore.configuration.ConfigHandler;
 import xyz.crafttogether.weg.EventListener;
 
 import java.awt.*;
@@ -35,7 +35,7 @@ public class WegListener extends EventListener {
                 .setTitle(player.getName() + " has went AFK")
                 .setColor(Color.GRAY)
                 .build();
-        long channelId = ConfigHandler.getConfig().getDiscordConfigSection().getChannelId();
+        long channelId = ConfigHandler.getConfig().getDiscordChannelId();
         TextChannel channel = CraftCore.getJda().getTextChannelById(channelId);
         if (channel == null) {
             logger.error("Failed to get discord channel");
@@ -59,7 +59,7 @@ public class WegListener extends EventListener {
                 .setTitle(player.getName() + " is no longer AFK")
                 .setColor(Color.GRAY)
                 .build();
-        long channelId = ConfigHandler.getConfig().getDiscordConfigSection().getChannelId();
+        long channelId = ConfigHandler.getConfig().getDiscordChannelId();
         TextChannel channel = CraftCore.getJda().getTextChannelById(channelId);
         if (channel == null) {
             logger.error("Failed to get discord channel");

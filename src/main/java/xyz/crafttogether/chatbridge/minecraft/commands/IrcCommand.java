@@ -8,7 +8,7 @@ import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.crafttogether.chatbridge.ChatBridge;
-import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
+import xyz.crafttogether.craftcore.configuration.ConfigHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class IrcCommand implements CommandExecutor, TabCompleter {
                     sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command");
                     return true;
                 }
-                if (!ConfigHandler.getConfig().getIrcConfigSection().isEnabled()) {
+                if (!ConfigHandler.getConfig().isIrcEnabled()) {
                     sender.sendMessage(ChatColor.RED + "IRC disabled in config");
                     return true;
                 }

@@ -3,8 +3,8 @@ package xyz.crafttogether.chatbridge.discord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.crafttogether.chatbridge.MessageSource;
-import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.utilities.Webhook;
+import xyz.crafttogether.craftcore.configuration.ConfigHandler;
 
 import java.io.IOException;
 
@@ -37,7 +37,7 @@ public class DiscordMessageSender {
         message = String.join(" ", args);
         if (message.length() == 0) return;
         try {
-            new Webhook(ConfigHandler.getConfig().getDiscordConfigSection().getWebhook())
+            new Webhook(ConfigHandler.getConfig().getDiscordWebhook())
                     .setAvatarUrl(avatar)
                     .setUsername(username)
                     .setContent(source.icon + " " + message)

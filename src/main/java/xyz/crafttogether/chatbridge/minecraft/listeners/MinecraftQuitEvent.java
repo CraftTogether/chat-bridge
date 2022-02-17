@@ -6,9 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.crafttogether.chatbridge.ChatBridge;
-import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 import xyz.crafttogether.craftcore.CraftCore;
+import xyz.crafttogether.craftcore.configuration.ConfigHandler;
 import xyz.crafttogether.weg.Weg;
 
 import java.awt.*;
@@ -25,7 +25,7 @@ public class MinecraftQuitEvent implements Listener {
         final EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Color.RED)
                 .setTitle(String.format("%s has left the server", event.getPlayer().getName()));
-        final long channelId = ConfigHandler.getConfig().getDiscordConfigSection().getChannelId();
+        final long channelId = ConfigHandler.getConfig().getDiscordChannelId();
         CraftCore.getJda().getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
         try {
             IrcMessageSender.send(String.format("\u00034%s has left the server", event.getPlayer().getName()));

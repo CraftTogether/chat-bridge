@@ -2,14 +2,12 @@ package xyz.crafttogether.chatbridge.discord;
 
 import dev.polarian.ircj.utils.Formatting;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import xyz.crafttogether.chatbridge.ChatBridge;
 import xyz.crafttogether.chatbridge.MessageSource;
-import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftMessageSender;
+import xyz.crafttogether.craftcore.configuration.ConfigHandler;
 
 import java.io.IOException;
 
@@ -24,7 +22,7 @@ public class DiscordListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getMessage().isWebhookMessage() || event.getMessage().getAuthor().isBot()) return;
-        final long channelId = ConfigHandler.getConfig().getDiscordConfigSection().getChannelId();
+        final long channelId = ConfigHandler.getConfig().getDiscordChannelId();
         if (channelId != event.getChannel().getIdLong()) return;
         Message referencedMessage = event.getMessage().getReferencedMessage();
         try {

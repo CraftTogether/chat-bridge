@@ -8,9 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.crafttogether.chatbridge.ChatBridge;
 import xyz.crafttogether.chatbridge.MessageSource;
-import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftMessageSender;
+import xyz.crafttogether.craftcore.configuration.ConfigHandler;
 
 /**
  * Event listener which listens for IRC events provided by the IRCJ library
@@ -51,7 +51,7 @@ public class IrcEventSubscriber extends EventListener {
      */
     @Override
     public void onPrivMessageEvent(PrivMessageEvent event) {
-        String prefix = ConfigHandler.getConfig().getIrcConfigSection().getCommandPrefix();
+        String prefix = ConfigHandler.getConfig().getIrcCommandPrefix();
         if (event.getMessage().startsWith(prefix)) {
             CommandHandler.parseCommand(event, prefix);
         }

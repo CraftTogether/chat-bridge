@@ -9,8 +9,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
-import xyz.crafttogether.chatbridge.configuration.sections.IrcConfigSection;
 import xyz.crafttogether.chatbridge.discord.DiscordListener;
 import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
 import xyz.crafttogether.chatbridge.discord.commands.DiscordOnlineCommand;
@@ -25,6 +23,7 @@ import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftMessageListener
 import xyz.crafttogether.chatbridge.minecraft.listeners.MinecraftQuitEvent;
 import xyz.crafttogether.chatbridge.minecraft.listeners.WegListener;
 import xyz.crafttogether.craftcore.CraftCore;
+import xyz.crafttogether.craftcore.configuration.ConfigHandler;
 import xyz.crafttogether.weg.EventListener;
 import xyz.crafttogether.weg.Weg;
 
@@ -76,9 +75,9 @@ public class ChatBridge extends JavaPlugin {
         }
 
         // Get the IRC configuration from the ConfigHandler and create IRC Config
-        IrcConfigSection section = ConfigHandler.getConfig().getIrcConfigSection();
-        final Config config = new Config(section.getHostname(), section.getPort(), section.getUsername(),
-                "#" + section.getChannel(), section.isTlsEnabled());
+        final Config config = new Config(ConfigHandler.getConfig().getIrcHostname(), ConfigHandler.getConfig().getIrcPort(),
+                ConfigHandler.getConfig().getIrcUsername(), "#" + ConfigHandler.getConfig().getIrcChannel(),
+                ConfigHandler.getConfig().isIrcUseTls());
 
         // Create IRC client and add listeners
         IrcClient ircClient = new IrcClient(config);
@@ -109,7 +108,7 @@ public class ChatBridge extends JavaPlugin {
      * Reset reconnect attempts variable
      */
     public static void resetAttempts() {
-        remainingAttempts = ConfigHandler.getConfig().getIrcConfigSection().getReconnectAttempts();
+        remainingAttempts = ConfigHandler.getConfig().getIrcReconnectAttempts();
     }
 
     /**
@@ -135,15 +134,15 @@ public class ChatBridge extends JavaPlugin {
      */
     public static void updateChannelStatistics(int onlinePlayers, int afkPlayers) {
         String topic = String.format("There are %d players online, %d of which are AFK", onlinePlayers, afkPlayers);
-        if (ConfigHandler.getConfig().getIrcConfigSection().isEnabled()) {
+        if (ConfigHandler.getConfig().isIrcEnabled()) {
             try {
-                ircConnection.getClient().getCommands().setTopic(ConfigHandler.getConfig().getIrcConfigSection().getChannel(), topic);
+                ircConnection.getClient().getCommands().setTopic(ConfigHandler.getConfig().getIrcChannel(), topic);
             } catch (IOException e) {
                 logger.error("Failed to update IRC topic");
                 e.printStackTrace();
             }
         }
-        TextChannel channel = CraftCore.getJda().getTextChannelById(ConfigHandler.getConfig().getDiscordConfigSection().getChannelId());
+        TextChannel channel = CraftCore.getJda().getTextChannelById(ConfigHandler.getConfig().getDiscordChannelId());
         if (channel == null) {
             logger.error("Failed to get discord channel");
             return;
@@ -160,7 +159,7 @@ public class ChatBridge extends JavaPlugin {
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         ConfigHandler.loadConfig();
-        if (ConfigHandler.getConfig().getIrcConfigSection().isEnabled()) {
+        if (ConfigHandler.getConfig().isIrcEnabled()) {
             createIrcConnection();
         }
         CraftCore.addListeners(new DiscordListener());
@@ -172,7 +171,7 @@ public class ChatBridge extends JavaPlugin {
 
         registerEvents();
         try {
-            if (ConfigHandler.getConfig().getIrcConfigSection().isEnabled()) {
+            if (ConfigHandler.getConfig().isIrcEnabled()) {
                 ircConnection.getClient().awaitReady();
                 CommandHandler.setInvalidCommandHandler(new InvalidCommand());
                 CommandHandler.addCommand("online", new IrcOnlineCommand());
