@@ -8,6 +8,7 @@ import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 public enum MessageSource {
     MINECRAFT(ConfigHandler.getConfig().getDiscordConfigSection().getPrefix()),
     DISCORD(""),
+    DISCORD_REFERENCE(""),
     IRC(ConfigHandler.getConfig().getIrcConfigSection().getPrefix()),
     OTHER("");
 

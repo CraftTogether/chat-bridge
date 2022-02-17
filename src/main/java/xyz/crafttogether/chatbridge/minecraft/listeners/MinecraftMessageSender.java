@@ -12,12 +12,21 @@ import xyz.crafttogether.chatbridge.MessageSource;
 public class MinecraftMessageSender {
 
     public static void send(String author, String message, MessageSource source) {
-        TextComponent msg;
-        if (source == MessageSource.DISCORD) {
-            msg = PlainTextComponentSerializer.plainText().deserialize(ChatColor.AQUA + String.format("[Discord]: <%s> %s", author, message));
-        } else {
-            msg = PlainTextComponentSerializer.plainText().deserialize(ChatColor.AQUA + String.format("[IRC]: <%s> %s", author, message));
+        TextComponent msg = null;
+        switch (source) {
+            case DISCORD -> {
+                msg = PlainTextComponentSerializer.plainText().deserialize(String.format("%s[Discord]: <%s> %s",
+                        ChatColor.AQUA, author, message));
+            }
+            case DISCORD_REFERENCE -> {
+                msg = PlainTextComponentSerializer.plainText().deserialize(String.format("%s(referenced) [Discord]: <%s> %s",
+                        ChatColor.AQUA, author, message));
+            }
+            case IRC -> {
+                msg = PlainTextComponentSerializer.plainText().deserialize(String.format("[IRC]: <%s> %s", author, message));
+            }
         }
+        if (msg == null) return;
         Bukkit.getServer().sendMessage(msg);
     }
 
