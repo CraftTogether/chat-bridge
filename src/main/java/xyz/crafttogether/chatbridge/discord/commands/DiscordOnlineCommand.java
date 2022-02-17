@@ -5,15 +5,15 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import xyz.crafttogether.chatbridge.discord.Command;
+import xyz.crafttogether.craftcore.discord.DiscordCommand;
 import xyz.crafttogether.weg.Weg;
 
 /**
  * Command to get the current online players on the minecraft server
  */
-public class DiscordOnlineCommand implements Command {
-    private static final String name = "online";
-    private static final String description = "View the online players";
+public class DiscordOnlineCommand implements DiscordCommand {
+    private static final String NAME = "online";
+    private static final String DESCRIPTION = "Check who is online on the server";
 
     @Override
     public void invoke(SlashCommandInteractionEvent event) {
@@ -36,12 +36,12 @@ public class DiscordOnlineCommand implements Command {
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String getCommandName() {
+        return NAME;
     }
 
     @Override
-    public String getDescription() {
-        return description;
+    public String getCommandDescription() {
+        return DESCRIPTION;
     }
 }

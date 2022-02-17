@@ -15,21 +15,6 @@ import java.io.IOException;
  * Handles discord event listening
  */
 public class DiscordListener extends ListenerAdapter {
-
-    /**
-     * Invoked when A slash command is executed
-     * @param event The SlashCommandEvent object
-     */
-    @Override
-    public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-        Command command = ChatBridge.getDiscordCommand(event.getName());
-        if (command == null) {
-            event.reply("Invalid command").queue();
-        } else {
-            command.invoke(event);
-        }
-    }
-
     /**
      * Invoked when a message is received in a channel the bot can read messages in
      * @param event The MessageReceivedEvent object

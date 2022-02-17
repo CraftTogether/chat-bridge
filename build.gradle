@@ -30,7 +30,7 @@ dependencies {
     implementation group: 'com.squareup.okhttp', name: 'okhttp', version: '2.7.5' // OkHttp
     implementation group: 'org.json', name: 'json', version: '20211205' // JSON
     implementation 'dev.polarian:ircj:1.1-SNAPSHOT-17'
-    compileOnly 'xyz.crafttogether:craftcore:1.0-SNAPSHOT-4'
+    compileOnly 'xyz.crafttogether:craftcore:1.0-SNAPSHOT-6'
     compileOnly "xyz.crafttogether:weg:1.1-SNAPSHOT-1"
 }
 

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.crafttogether.chatbridge.configuration.ConfigHandler;
 import xyz.crafttogether.chatbridge.configuration.sections.IrcConfigSection;
-import xyz.crafttogether.chatbridge.discord.Command;
 import xyz.crafttogether.chatbridge.discord.DiscordListener;
 import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
 import xyz.crafttogether.chatbridge.discord.commands.DiscordOnlineCommand;
@@ -42,11 +41,6 @@ public class ChatBridge extends JavaPlugin {
      * SLF4J Logger instance
      */
     private static final Logger logger = LoggerFactory.getLogger(ChatBridge.class);
-
-    /**
-     * A hashmap containing all the discord commands which are registered on loading the plugin
-     */
-    private static final HashMap<String, Command> discordCommands = new HashMap<>();
 
     /**
      * A static instance of the JavaPlugin class (self)
@@ -134,26 +128,6 @@ public class ChatBridge extends JavaPlugin {
     }
 
     /**
-     * Method used to add a discord command, used to upset the command and also add it to the discord command hashmap
-     * @param command An object which implements the Command interface
-     * @see Command
-     */
-    public static void addDiscordCommand(Command command) {
-        CraftCore.getJda().upsertCommand(command.getName(), command.getDescription()).queue();
-        discordCommands.put(command.getName(), command);
-    }
-
-    /**
-     * Gets the command (if exists) from the command hashmap, returns null if the command is not registered
-     * @param commandName The name of the command added to the hashmap
-     * @return The Command if it exists, otherwise null
-     */
-    @Nullable
-    public static Command getDiscordCommand(String commandName) {
-        return discordCommands.getOrDefault(commandName, null);
-    }
-
-    /**
      * Updates the discord and IRC channel topic --> which contains info about the status of the plugin
      *
      * @param onlinePlayers The number of players currently online on the server
@@ -193,7 +167,7 @@ public class ChatBridge extends JavaPlugin {
             createIrcConnection();
         }
         CraftCore.addListeners(new DiscordListener());
-        addDiscordCommand(new DiscordOnlineCommand());
+        CraftCore.addDiscordCommand(new DiscordOnlineCommand());
         DiscordMessageSender.send("Server", ":white_check_mark: Chat bridge enabled", null, MessageSource.OTHER);
 
         wegListener = new WegListener();
