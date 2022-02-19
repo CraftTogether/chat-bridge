@@ -33,7 +33,9 @@ public class DiscordListener extends ListenerAdapter {
                         referencedMessage.getContentRaw()));
             }
             MinecraftMessageSender.send(event.getMember().getEffectiveName(), event.getMessage().getContentRaw(), MessageSource.DISCORD);
-            IrcMessageSender.send(String.format("\u000310[Discord]: <\u200B%s> %s", event.getMember().getEffectiveName(), event.getMessage().getContentRaw()));
+            IrcMessageSender.send(String.format("%s[Discord]: <%s%s> %s",
+                    Formatting.COLOUR_CYAN.getFormat(), Formatting.ZWSP.getFormat(),
+                    event.getMember().getEffectiveName(), event.getMessage().getContentRaw()));
         } catch (IOException e) {
             e.printStackTrace();
         }

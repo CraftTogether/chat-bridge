@@ -23,7 +23,8 @@ public class MinecraftMessageSender {
                         ChatColor.AQUA, author, message));
             }
             case IRC -> {
-                msg = PlainTextComponentSerializer.plainText().deserialize(String.format("[IRC]: <%s> %s", author, message));
+                msg = PlainTextComponentSerializer.plainText().deserialize(String.format("%s[IRC]: <%s> %s",
+                        ChatColor.AQUA, author, message));
             }
         }
         if (msg == null) return;
