@@ -1,5 +1,6 @@
 package xyz.crafttogether.chatbridge.minecraft.listeners;
 
+import dev.polarian.ircj.utils.Formatting;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -42,7 +43,8 @@ public class WegListener extends EventListener {
         }
         channel.sendMessageEmbeds(embed).queue();
         try {
-            IrcMessageSender.send(String.format("\00314%s has went AFK", player.getName()));
+            IrcMessageSender.send(String.format("%s%s%s has went AFK",
+                    Formatting.COLOUR_GRAY, Formatting.ZWSP, player.getName()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,7 +68,8 @@ public class WegListener extends EventListener {
         }
         channel.sendMessageEmbeds(embed).queue();
         try {
-            IrcMessageSender.send(String.format("\00314%s is no longer AFK", player.getName()));
+            IrcMessageSender.send(String.format("%s%s%s is no longer AFK",
+                    Formatting.COLOUR_GRAY, Formatting.ZWSP, player.getName()));
         } catch (IOException e) {
             e.printStackTrace();
         }

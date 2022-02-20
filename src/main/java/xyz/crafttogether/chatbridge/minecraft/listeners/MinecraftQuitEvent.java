@@ -1,5 +1,6 @@
 package xyz.crafttogether.chatbridge.minecraft.listeners;
 
+import dev.polarian.ircj.utils.Formatting;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -28,7 +29,8 @@ public class MinecraftQuitEvent implements Listener {
         final long channelId = ConfigHandler.getConfig().getDiscordChannelId();
         CraftCore.getJda().getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
         try {
-            IrcMessageSender.send(String.format("\u00034%s has left the server", event.getPlayer().getName()));
+            IrcMessageSender.send(String.format("%s%s%s has left the server",
+                    Formatting.COLOUR_RED, Formatting.ZWSP, event.getPlayer().getName()));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
 package xyz.crafttogether.chatbridge.minecraft.listeners;
 
+import dev.polarian.ircj.utils.Formatting;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.kyori.adventure.text.TextComponent;
@@ -38,7 +39,8 @@ public class MinecraftJoinEvent implements Listener {
         final long channelId = ConfigHandler.getConfig().getDiscordChannelId();
         CraftCore.getJda().getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
         try {
-            IrcMessageSender.send(String.format("\u00033%s has joined the server", event.getPlayer().getName()));
+            IrcMessageSender.send(String.format("%s%s%s has joined the server",
+                    Formatting.COLOUR_GREEN, Formatting.ZWSP, event.getPlayer().getName()));
         } catch (IOException error) {
             error.printStackTrace();
         }
