@@ -54,6 +54,11 @@
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.0.0-M2</version>
+            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -92,16 +97,19 @@
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>4.9.3</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20211205</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>dev.polarian</groupId>
             <artifactId>ircj</artifactId>
             <version>1.1-SNAPSHOT-18</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>xyz.crafttogether</groupId>
