@@ -37,22 +37,21 @@ public class IrcCommand implements CommandExecutor, TabCompleter {
                 }
                 switch (args[1]) {
                     case "false" -> {
-                        if (!ChatBridge.getIrcThread().getClient().isConnected()) {
-                            ChatBridge.createIrcConnection();
+                        if (!ChatBridge.getIrcClient().isConnected()) {
+                            ChatBridge.connectIrc();
                         } else {
                             sender.sendMessage(ChatColor.RED + "IRC client already connected");
                         }
                     }
 
                     case "true" -> {
-                        if (ChatBridge.getIrcThread().getClient().isConnected()) {
+                        if (ChatBridge.getIrcClient().isConnected()) {
                             try {
-                                ChatBridge.getIrcThread().getClient().getCommands().disconnect("Restarting chat bridge");
-                                ChatBridge.getIrcThread().join();
+                                ChatBridge.getIrcClient().getCommands().disconnectAndAwait("Restarting chat bridge");
                             } catch (IOException | InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            ChatBridge.createIrcConnection();
+                            ChatBridge.connectIrc();
                         }
                     }
 
@@ -69,7 +68,7 @@ public class IrcCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
                 try {
-                    ChatBridge.getIrcThread().getClient().getCommands().disconnect("Disconnected by " + sender.getName());
+                    ChatBridge.getIrcClient().getCommands().disconnect("Disconnected by " + sender.getName());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

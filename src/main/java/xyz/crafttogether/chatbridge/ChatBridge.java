@@ -13,7 +13,6 @@ import xyz.crafttogether.chatbridge.discord.DiscordListener;
 import xyz.crafttogether.chatbridge.discord.DiscordMessageSender;
 import xyz.crafttogether.chatbridge.discord.commands.DiscordOnlineCommand;
 import xyz.crafttogether.chatbridge.irc.CommandHandler;
-import xyz.crafttogether.chatbridge.irc.IrcConnection;
 import xyz.crafttogether.chatbridge.irc.IrcEventSubscriber;
 import xyz.crafttogether.chatbridge.irc.commands.InvalidCommand;
 import xyz.crafttogether.chatbridge.irc.commands.IrcOnlineCommand;
@@ -27,9 +26,7 @@ import xyz.crafttogether.craftcore.configuration.ConfigHandler;
 import xyz.crafttogether.weg.EventListener;
 import xyz.crafttogether.weg.Weg;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * Main class for the plugin, extends the spigot JavaPlugin class
@@ -45,48 +42,20 @@ public class ChatBridge extends JavaPlugin {
      * A static instance of the JavaPlugin class (self)
      */
     private static JavaPlugin plugin;
-    /**
-     * Irc Thread, handles the IRC connection
-     */
-    private static IrcConnection ircConnection;
 
     /**
      * A variable storing the number of remaining attempts to connect to the IRC server before it is abandoned and
      * has to be manually connected through the irc connection command
      */
     private static int remainingAttempts;
-
     /**
      * The instance of the Weg event listener so that the event can be unsubscribed when the plugin is unloaded
      */
     private static EventListener wegListener;
-
     /**
-     * A static method used to creating the IRC connection. Will only connect if there is no existing connection or
-     * if the thread has exited.
+     * The IRC client
      */
-    public static void createIrcConnection() {
-        // Check if already connected to the IRC server
-        if (ircConnection != null) {
-            if (ircConnection.isAlive()) {
-                logger.error("Attempted to create IRC connection, however connection already exists");
-                return;
-            }
-        }
-
-        // Get the IRC configuration from the ConfigHandler and create IRC Config
-        final Config config = new Config(ConfigHandler.getConfig().getIrcHostname(), ConfigHandler.getConfig().getIrcPort(),
-                ConfigHandler.getConfig().getIrcUsername(), "#" + ConfigHandler.getConfig().getIrcChannel(),
-                ConfigHandler.getConfig().isIrcUseTls());
-
-        // Create IRC client and add listeners
-        IrcClient ircClient = new IrcClient(config);
-        ircClient.addListener(new IrcEventSubscriber());
-
-        // create the IRC connection and start it
-        ircConnection = new IrcConnection(ircClient);
-        ircConnection.start();
-    }
+    private static IrcClient ircClient;
 
     /**
      * Gets the static instance of the plugin
@@ -94,14 +63,6 @@ public class ChatBridge extends JavaPlugin {
      */
     public static JavaPlugin getPlugin() {
         return plugin;
-    }
-
-    /**
-     * Gets the IRC connection (extends thread)
-     * @return IrcConnection which extends the Thread class
-     */
-    public static IrcConnection getIrcThread() {
-        return ircConnection;
     }
 
     /**
@@ -127,6 +88,15 @@ public class ChatBridge extends JavaPlugin {
     }
 
     /**
+     * Gets the IRC client
+     *
+     * @return The IRC client
+     */
+    public static IrcClient getIrcClient() {
+        return ircClient;
+    }
+
+    /**
      * Updates the discord and IRC channel topic --> which contains info about the status of the plugin
      *
      * @param onlinePlayers The number of players currently online on the server
@@ -136,7 +106,7 @@ public class ChatBridge extends JavaPlugin {
         String topic = String.format("There are %d players online, %d of which are AFK", onlinePlayers, afkPlayers);
         if (ConfigHandler.getConfig().isIrcEnabled()) {
             try {
-                ircConnection.getClient().getCommands().setTopic(ConfigHandler.getConfig().getIrcChannel(), topic);
+                ircClient.getCommands().setTopic(ConfigHandler.getConfig().getIrcChannel(), topic);
             } catch (IOException e) {
                 logger.error("Failed to update IRC topic");
                 e.printStackTrace();
@@ -151,6 +121,24 @@ public class ChatBridge extends JavaPlugin {
     }
 
     /**
+     * Connect to the IRC server if not already connected
+     */
+    public static void connectIrc() {
+        if (ircClient != null) if (ircClient.isConnected()) return;
+        if (!ConfigHandler.getConfig().isIrcEnabled()) return;
+        Config config = new Config(
+                ConfigHandler.getConfig().getIrcHostname(),
+                ConfigHandler.getConfig().getIrcPort(),
+                ConfigHandler.getConfig().getIrcUsername(),
+                ConfigHandler.getConfig().getIrcChannel(),
+                ConfigHandler.getConfig().isIrcEnabled()
+        );
+        ircClient = new IrcClient(config);
+        ircClient.addListener(new IrcEventSubscriber());
+        ircClient.connect();
+    }
+
+    /**
      * Invoked when the plugin is enabled
      */
     @Override
@@ -159,9 +147,7 @@ public class ChatBridge extends JavaPlugin {
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         ConfigHandler.loadConfig();
-        if (ConfigHandler.getConfig().isIrcEnabled()) {
-            createIrcConnection();
-        }
+        connectIrc();
         CraftCore.addListeners(new DiscordListener());
         CraftCore.addDiscordCommand(new DiscordOnlineCommand());
         DiscordMessageSender.send("Server", ":white_check_mark: Chat bridge enabled", null, MessageSource.OTHER);
@@ -172,7 +158,7 @@ public class ChatBridge extends JavaPlugin {
         registerEvents();
         try {
             if (ConfigHandler.getConfig().isIrcEnabled()) {
-                ircConnection.getClient().awaitReady();
+                ircClient.awaitReady();
                 CommandHandler.setInvalidCommandHandler(new InvalidCommand());
                 CommandHandler.addCommand("online", new IrcOnlineCommand());
             }
@@ -191,15 +177,14 @@ public class ChatBridge extends JavaPlugin {
     public void onDisable() {
         Weg.removeListener(wegListener);
         DiscordMessageSender.send("Server", ":octagonal_sign: Chat bridge disabled",  null, MessageSource.OTHER);
-        try {
-            if (ircConnection != null) {
-                if (ircConnection.isAlive()) {
-                    ircConnection.getClient().getCommands().disconnect("Chat Bridge has been disabled");
-                    ircConnection.join();
+        if (ConfigHandler.getConfig().isIrcEnabled()) {
+            if (ircClient.isConnected()) {
+                try {
+                    ircClient.getCommands().disconnect("Chat bridge has been disabled");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
         }
     }
 

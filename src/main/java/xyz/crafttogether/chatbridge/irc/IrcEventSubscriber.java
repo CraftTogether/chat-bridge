@@ -32,7 +32,7 @@ public class IrcEventSubscriber extends EventListener {
         logger.warn("Disconnected from IRC server for reason: " + reason.toString().toLowerCase());
         switch (reason) {
             case TIMEOUT:
-                if (ChatBridge.getRemainingAttempts() > 0) ChatBridge.createIrcConnection();
+                if (ChatBridge.getRemainingAttempts() > 0) ChatBridge.connectIrc();
                 ChatBridge.decrementRemainingAttempts();
                 break;
 
