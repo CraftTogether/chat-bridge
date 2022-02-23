@@ -39,8 +39,7 @@ public class MinecraftJoinEvent implements Listener {
         final long channelId = ConfigHandler.getConfig().getDiscordChannelId();
         CraftCore.getJda().getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
         try {
-            IrcMessageSender.send(String.format("%s%s%s has joined the server",
-                    Formatting.COLOUR_GREEN, Formatting.ZWSP, event.getPlayer().getName()));
+            IrcMessageSender.sendMinecraftJoinMessage(event.getPlayer().getName());
         } catch (IOException error) {
             error.printStackTrace();
         }

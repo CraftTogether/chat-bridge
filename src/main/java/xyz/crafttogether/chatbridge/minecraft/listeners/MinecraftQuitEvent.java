@@ -29,8 +29,7 @@ public class MinecraftQuitEvent implements Listener {
         final long channelId = ConfigHandler.getConfig().getDiscordChannelId();
         CraftCore.getJda().getTextChannelById(String.valueOf(channelId)).sendMessageEmbeds(embed.build()).queue();
         try {
-            IrcMessageSender.send(String.format("%s%s%s has left the server",
-                    Formatting.COLOUR_RED, Formatting.ZWSP, event.getPlayer().getName()));
+            IrcMessageSender.sendMinecraftQuitMessage(event.getPlayer().getName());
         } catch (IOException e) {
             e.printStackTrace();
         }

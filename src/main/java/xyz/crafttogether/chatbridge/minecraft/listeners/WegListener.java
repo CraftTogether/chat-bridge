@@ -43,8 +43,7 @@ public class WegListener extends EventListener {
         }
         channel.sendMessageEmbeds(embed).queue();
         try {
-            IrcMessageSender.send(String.format("%s%s%s has went AFK",
-                    Formatting.COLOUR_GRAY, Formatting.ZWSP, player.getName()));
+            IrcMessageSender.sendMinecraftAfkMessage(player.getName());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,8 +67,7 @@ public class WegListener extends EventListener {
         }
         channel.sendMessageEmbeds(embed).queue();
         try {
-            IrcMessageSender.send(String.format("%s%s%s is no longer AFK",
-                    Formatting.COLOUR_GRAY, Formatting.ZWSP, player.getName()));
+            IrcMessageSender.sendMinecraftReturnMessage(player.getName());
         } catch (IOException e) {
             e.printStackTrace();
         }

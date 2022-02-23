@@ -28,14 +28,12 @@ public class DiscordListener extends ListenerAdapter {
         try {
             if (referencedMessage != null) {
                 MinecraftMessageSender.send(referencedMessage.getAuthor().getName(), referencedMessage.getContentRaw(), MessageSource.DISCORD_REFERENCE);
-                IrcMessageSender.send(String.format("(referenced) %s[Discord]: <%s%s> %s",
-                        Formatting.COLOUR_GRAY, Formatting.ZWSP, referencedMessage.getAuthor().getName(),
-                        referencedMessage.getContentRaw()));
+                IrcMessageSender.send(referencedMessage.getAuthor().getName(), referencedMessage.getContentRaw(),
+                        MessageSource.DISCORD_REFERENCE);
             }
             MinecraftMessageSender.send(event.getMember().getEffectiveName(), event.getMessage().getContentRaw(), MessageSource.DISCORD);
-            IrcMessageSender.send(String.format("%s[Discord]: <%s%s> %s",
-                    Formatting.COLOUR_CYAN, Formatting.ZWSP,
-                    event.getMember().getEffectiveName(), event.getMessage().getContentRaw()));
+            IrcMessageSender.send(event.getMessage().getAuthor().getName(), event.getMessage().getContentRaw(),
+                    MessageSource.DISCORD);
         } catch (IOException e) {
             e.printStackTrace();
         }
