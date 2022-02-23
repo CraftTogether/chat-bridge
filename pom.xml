@@ -114,7 +114,7 @@
         <dependency>
             <groupId>xyz.crafttogether</groupId>
             <artifactId>craftcore</artifactId>
-            <version>1.0-SNAPSHOT-7</version>
+            <version>1.0-SNAPSHOT-9</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

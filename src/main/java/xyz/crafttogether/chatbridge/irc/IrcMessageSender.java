@@ -12,6 +12,6 @@ public class IrcMessageSender {
 
     public static void send(String message) throws IOException {
         if (!ChatBridge.getIrcClient().isConnected()) return;
-        ChatBridge.getIrcClient().getCommands().sendMessage("#" + ConfigHandler.getConfig().getIrcChannel(), message);
+        ChatBridge.getIrcClient().getCommands().sendMessage(ConfigHandler.getConfig().getIrcChannel(), message);
     }
 }
