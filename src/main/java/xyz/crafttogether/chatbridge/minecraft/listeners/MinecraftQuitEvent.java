@@ -22,7 +22,7 @@ public class MinecraftQuitEvent implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        ChatBridge.updateChannelStatistics(Bukkit.getOnlinePlayers().size(), Weg.getAfkPlayers());
+        ChatBridge.updateIrcChannelStatistics(Bukkit.getOnlinePlayers().size(), Weg.getAfkPlayers());
         final EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Color.RED)
                 .setTitle(String.format("%s has left the server", event.getPlayer().getName()));

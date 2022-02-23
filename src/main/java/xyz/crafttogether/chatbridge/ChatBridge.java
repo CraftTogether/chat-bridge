@@ -27,6 +27,8 @@ import xyz.crafttogether.weg.EventListener;
 import xyz.crafttogether.weg.Weg;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Main class for the plugin, extends the spigot JavaPlugin class
@@ -56,6 +58,10 @@ public class ChatBridge extends JavaPlugin {
      * The IRC client
      */
     private static IrcClient ircClient;
+    /**
+     *
+     */
+    private static Timer timer;
 
     /**
      * Gets the static instance of the plugin
@@ -96,28 +102,25 @@ public class ChatBridge extends JavaPlugin {
         return ircClient;
     }
 
-    /**
-     * Updates the discord and IRC channel topic --> which contains info about the status of the plugin
-     *
-     * @param onlinePlayers The number of players currently online on the server
-     * @param afkPlayers The number of players currently AFK on the server
-     */
-    public static void updateChannelStatistics(int onlinePlayers, int afkPlayers) {
-        String topic = String.format("There are %d players online, %d of which are AFK", onlinePlayers, afkPlayers);
-        if (ConfigHandler.getConfig().isIrcEnabled()) {
-            try {
-                ircClient.getCommands().setTopic(ConfigHandler.getConfig().getIrcChannel(), topic);
-            } catch (IOException e) {
-                logger.error("Failed to update IRC topic");
-                e.printStackTrace();
-            }
-        }
+    public static void updateDiscordChannelStatistics(int onlinePlayers, int afkPlayers) {
         TextChannel channel = CraftCore.getJda().getTextChannelById(ConfigHandler.getConfig().getDiscordChannelId());
         if (channel == null) {
             logger.error("Failed to get discord channel");
             return;
         }
-        channel.getManager().setTopic(topic).queue();
+        channel.getManager().setTopic(String.format("There are %d players online, %d of which are AFK",
+                onlinePlayers, afkPlayers)).queue();
+    }
+
+    public static void updateIrcChannelStatistics(int onlinePlayers, int afkPlayers) {
+        if (!ConfigHandler.getConfig().isIrcEnabled()) return;
+        try {
+            ircClient.getCommands().setTopic(ConfigHandler.getConfig().getIrcChannel(),
+                    String.format("There are %d players online, %d of which are AFK", onlinePlayers, afkPlayers));
+        } catch (IOException e) {
+            logger.error("Failed to update IRC topic");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -148,6 +151,13 @@ public class ChatBridge extends JavaPlugin {
         saveDefaultConfig();
         ConfigHandler.loadConfig();
         connectIrc();
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                updateDiscordChannelStatistics(Bukkit.getOnlinePlayers().size(), Weg.getAfkPlayers());
+            }
+        }, 0, 180000); // executes every 3 minutes
         CraftCore.addListeners(new DiscordListener());
         CraftCore.addDiscordCommand(new DiscordOnlineCommand());
         DiscordMessageSender.send("Server", ":white_check_mark: Chat bridge enabled", null, MessageSource.OTHER);
@@ -166,7 +176,7 @@ public class ChatBridge extends JavaPlugin {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        updateChannelStatistics(Bukkit.getOnlinePlayers().size(), Weg.getAfkPlayers());
+        updateIrcChannelStatistics(0, 0);
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "ChatBridge is active");
     }
 
@@ -176,6 +186,7 @@ public class ChatBridge extends JavaPlugin {
     @Override
     public void onDisable() {
         Weg.removeListener(wegListener);
+        timer.cancel();
         DiscordMessageSender.send("Server", ":octagonal_sign: Chat bridge disabled",  null, MessageSource.OTHER);
         if (ConfigHandler.getConfig().isIrcEnabled()) {
             if (ircClient.isConnected()) {

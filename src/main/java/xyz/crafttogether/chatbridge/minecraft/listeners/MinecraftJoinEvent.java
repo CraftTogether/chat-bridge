@@ -31,7 +31,7 @@ public class MinecraftJoinEvent implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         assignColor(event.getPlayer());
-        ChatBridge.updateChannelStatistics(Bukkit.getOnlinePlayers().size(), Weg.getAfkPlayers());
+        ChatBridge.updateIrcChannelStatistics(Bukkit.getOnlinePlayers().size(), Weg.getAfkPlayers());
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Color.GREEN)
