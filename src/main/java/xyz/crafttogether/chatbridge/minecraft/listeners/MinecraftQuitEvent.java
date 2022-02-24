@@ -1,9 +1,7 @@
 package xyz.crafttogether.chatbridge.minecraft.listeners;
 
-import dev.polarian.ircj.utils.Formatting;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
