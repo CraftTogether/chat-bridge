@@ -4,13 +4,16 @@ import dev.polarian.ircj.utils.Formatting;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.crafttogether.chatbridge.ChatBridge;
 import xyz.crafttogether.chatbridge.irc.IrcMessageSender;
 import xyz.crafttogether.craftcore.CraftCore;
 import xyz.crafttogether.craftcore.configuration.ConfigHandler;
 import xyz.crafttogether.weg.EventListener;
+import xyz.crafttogether.weg.Weg;
 
 import java.awt.*;
 import java.io.IOException;
@@ -44,6 +47,7 @@ public class WegListener extends EventListener {
         channel.sendMessageEmbeds(embed).queue();
         try {
             IrcMessageSender.sendMinecraftAfkMessage(player.getName());
+            ChatBridge.updateIrcChannelStatistics(Bukkit.getOnlinePlayers().size(), Weg.getAfkPlayers());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,6 +72,7 @@ public class WegListener extends EventListener {
         channel.sendMessageEmbeds(embed).queue();
         try {
             IrcMessageSender.sendMinecraftReturnMessage(player.getName());
+            ChatBridge.updateIrcChannelStatistics(Bukkit.getOnlinePlayers().size(), Weg.getAfkPlayers());
         } catch (IOException e) {
             e.printStackTrace();
         }
