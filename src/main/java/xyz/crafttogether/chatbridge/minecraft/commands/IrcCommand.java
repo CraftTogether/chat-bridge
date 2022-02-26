@@ -47,8 +47,8 @@ public class IrcCommand implements CommandExecutor, TabCompleter {
                     case "true" -> {
                         if (ChatBridge.getIrcClient().isConnected()) {
                             try {
-                                ChatBridge.getIrcClient().getCommands().disconnectAndAwait("Restarting chat bridge");
-                            } catch (IOException | InterruptedException e) {
+                                ChatBridge.getIrcClient().getCommands().disconnect("Restarting chat bridge");
+                            } catch (IOException e) {
                                 e.printStackTrace();
                             }
                             ChatBridge.connectIrc();
