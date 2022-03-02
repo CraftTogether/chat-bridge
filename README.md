@@ -16,6 +16,8 @@ A simple, efficient 3 way bridge between Discord, IRC (optional) and Minecraft, 
 are looking for a Bridge between IRC and Discord see [Bridge.Net](https://gitlab.com/PolarianDev/bridge.net)
 
 **WARNING:** <BR>
+as of v1.3 Chat Bridge depends on [CraftCore]() and [Weg](), these must be present in the `plugin` folder/directory or Chat Bridge will  not work!
+
 As of v1.2 Chat Bridge depends on [kelp](https://github.com/CraftTogether/Kelp), [Rinku](https://github.com/CraftTogether/Rinku) and [Weg](https://github.com/CraftTogether/weg), these all must be present in the `plugin` folder/directory or Chat Bridge will not work! 
 
 As of v1.1 Chat Bridge depends on the [kelp](https://github.com/CraftTogether/Kelp) plugin, which provides the discord connectivity, the plugin will not load without the kelp dependency therefore it must also be added to your `plugins` directory/folder
